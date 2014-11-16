@@ -745,7 +745,7 @@ function setup(self) {
              .on('end', onEnd);
 
   function onError(err) {
-    var which = (self.server ? 'server' : 'client');
+    var which = (this === self.server ? 'server' : 'client');
     assert(false, makeMsg(self.what, 'Unexpected ' + which + ' error: ' + err));
   }
   function onReady() {
