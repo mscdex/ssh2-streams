@@ -356,7 +356,7 @@ SSH2Stream methods
 
 * **serviceAccept**(< _string_ >serviceName) - _boolean_ - Writes a service accept packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
-* **authFail**([< _array_ >authMethods[, < _boolean_ >partialSuccess]]) - _boolean_ - Writes a userauth failure packet. `authMethods` is an _array_ of authentication methods that can continue. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **authFailure**([< _array_ >authMethods[, < _boolean_ >partialSuccess]]) - _boolean_ - Writes a userauth failure packet. `authMethods` is an _array_ of authentication methods that can continue. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
 * **authSuccess**() - _boolean_ - Writes a userauth success packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
