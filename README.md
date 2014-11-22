@@ -185,6 +185,8 @@ SSH2Stream events
 
         * **bindPort** - _string_ - The port to start/stop binding to.
 
+    * For `no-more-sessions@openssh.com`, there is no `reqData`.
+
     * For any other requests, it's a _Buffer_ containing the raw request-specific data.
 
 * **CHANNEL_REQUEST:<channel>**(< _object_ >reqInfo) - `reqInfo` properties depend on `reqInfo.request`:
@@ -258,6 +260,8 @@ SSH2Stream events
     * `xon-xoff`:
 
         * **clientControl** - _boolean_ - Client can/can't perform flow control (control-S/control-Q processing).
+
+    * `auth-agent-req@openssh.com` has no `reqInfo`.
 
 SSH2Stream methods
 ------------------
@@ -349,6 +353,8 @@ SSH2Stream methods
     * **screen** - _integer_ - The screen number to forward X11 connections for.
 
 * **subsystem**(< _integer_ >channel, < _string_ >name[, < _boolean_ >wantReply]) - _boolean_ - Writes a subsystem channel request packet. `name` is the name of the subsystem (e.g. `sftp` or `netconf`). `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+
+* **noMoreSessions**([< _boolean_ >wantReply]) - _boolean_ - Writes a no-more-sessions@openssh.com request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
 
 
