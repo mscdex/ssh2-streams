@@ -582,6 +582,15 @@ SFTP methods
 
 * **realpath**(< _string_ >path, < _function_ >callback) - _boolean_ - Resolves `path` to an absolute path. Returns `false` if you should wait for the `drain` event before sending any more traffic. `callback` has 2 parameters: < _Error_ >err, < _string_ >absPath.
 
+* **ext_openssh_rename**(< _string_ >srcPath, < _string_ >destPath, < _function_ >callback) - _boolean_ - **OpenSSH extension** Performs POSIX rename(3) from `srcPath` to `destPath`. Returns `false` if you should wait for the `drain` event before sending any more traffic. `callback` has 1 parameter: < _Error_ >err.
+
+* **ext_openssh_statvfs**(< _string_ >path, < _function_ >callback) - _boolean_ - **OpenSSH extension** Performs POSIX statvfs(2) on `path`. Returns `false` if you should wait for the `drain` event before sending any more traffic. `callback` has 2 parameters: < _Error_ >err, < _object_ >fsInfo. `fsInfo` contains the information as found in the [statvfs struct](http://linux.die.net/man/2/statvfs).
+
+* **ext_openssh_fstatvfs**(< _Buffer_ >handle, < _function_ >callback) - _boolean_ - **OpenSSH extension** Performs POSIX fstatvfs(2) on open handle `handle`. Returns `false` if you should wait for the `drain` event before sending any more traffic. `callback` has 2 parameters: < _Error_ >err, < _object_ >fsInfo. `fsInfo` contains the information as found in the [statvfs struct](http://linux.die.net/man/2/statvfs).
+
+* **ext_openssh_hardlink**(< _string_ >targetPath, < _string_ >linkPath, < _function_ >callback) - _boolean_ - **OpenSSH extension** Performs POSIX link(2) to create a hard link to `targetPath` at `linkPath`. Returns `false` if you should wait for the `drain` event before sending any more traffic. `callback` has 1 parameter: < _Error_ >err.
+
+* **ext_openssh_fsync**(< _Buffer_ >handle, < _function_ >callback) - _boolean_ - **OpenSSH extension** Performs POSIX fsync(3) on the open handle `handle`. Returns `false` if you should wait for the `drain` event before sending any more traffic. `callback` has 1 parameter: < _Error_ >err.
 
 
 **Server-only methods**
