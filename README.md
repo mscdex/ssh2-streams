@@ -455,10 +455,15 @@ SFTP static constants
 * **SFTPStream.OPEN_MODE** - _object_ - Contains the various open file flags:
 
   * `READ`
+
   * `WRITE`
+
   * `APPEND`
+
   * `CREAT`
+
   * `TRUNC`
+
   * `EXCL`
 
 SFTP methods
