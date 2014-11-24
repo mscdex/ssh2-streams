@@ -93,13 +93,13 @@ SSH2Stream events
 
     * **data** - _object_ - The properties available depend on `type`:
 
-        * `x11`:
+        * `x11` (server->client):
 
             * **srcIP** - _string_ - Source IP address of X11 connection request.
 
             * **srcPort** - _string_ - Source port of X11 connection request.
 
-        * `forwarded-tcpip`:
+        * `forwarded-tcpip` (server->client):
 
             * **srcIP** - _string_ - Source IP address of incoming connection.
 
@@ -109,7 +109,27 @@ SSH2Stream events
 
             * **destPort** - _string_ - Destination port of incoming connection.
 
-        * `session`, `auth-agent@openssh.com`, and other channel types do not have any additional data.
+        * `direct-tcpip` (client->server):
+
+            * **srcIP** - _string_ - Source IP address of outgoing connection.
+
+            * **srcPort** - _string_ - Source port of outgoing connection.
+
+            * **destIP** - _string_ - Destination IP address of outgoing connection.
+
+            * **destPort** - _string_ - Destination port of outgoing connection.
+
+        * `forwarded-streamlocal@openssh.com` (server->client):
+
+            * **socketPath** - _string_ - Source socket path of incoming connection.
+
+        * `direct-streamlocal@openssh.com` (client->server):
+
+            * **socketPath** - _string_ - Destination socket path of outgoing connection.
+
+        * `session` (client->server) has no extra data.
+
+        * `auth-agent@openssh.com` (server->client) has no extra data.
 
 * **DISCONNECT**(< _string_ >reason, < _integer_ >reasonCode, < _string_ >description)
 
@@ -184,6 +204,10 @@ SSH2Stream events
         * **bindAddr** - _string_ - The IP address to start/stop binding to.
 
         * **bindPort** - _string_ - The port to start/stop binding to.
+
+    * For `streamlocal-forward`/`cancel-streamlocal-forward`, it's an _object_ containing:
+
+        * **socketPath** - _string_ - The socket path to start/stop listening on.
 
     * For `no-more-sessions@openssh.com`, there is no `reqData`.
 
@@ -354,7 +378,13 @@ SSH2Stream methods
 
 * **subsystem**(< _integer_ >channel, < _string_ >name[, < _boolean_ >wantReply]) - _boolean_ - Writes a subsystem channel request packet. `name` is the name of the subsystem (e.g. `sftp` or `netconf`). `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
-* **noMoreSessions**([< _boolean_ >wantReply]) - _boolean_ - Writes a no-more-sessions@openssh.com request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **openssh_noMoreSessions**([< _boolean_ >wantReply]) - _boolean_ - Writes a no-more-sessions@openssh.com request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+
+* **openssh_streamLocalForward**(< _string_ >socketPath[, < _boolean_ >wantReply]) - _boolean_ - Writes a streamlocal-forward@openssh.com request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+
+* **openssh_cancelStreamLocalForward**(< _string_ >socketPath[, < _boolean_ >wantReply]) - _boolean_ - Writes a cancel-streamlocal-forward@openssh.com request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+
+* **openssh_directStreamLocal**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _object_ >config) - _boolean_ - Writes a direct-streamlocal@openssh.com channel open packet. `config` must contain `socketPath`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
 
 
