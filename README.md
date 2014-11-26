@@ -81,56 +81,6 @@ SSH2Stream events
 
     * **description** - _string_ - An optional description of the failure.
 
-* **CHANNEL_OPEN**(< _object_ >channelInfo) - `channelInfo` contains:
-
-    * **type** - _string_ - The channel type (e.g. `x11`, `forwarded-tcpip`, `session`).
-
-    * **sender** - _integer_ - The remote party's channel number.
-
-    * **window** - _integer_ - The initial window size for the channel.
-
-    * **packetSize** - _integer_ - The maximum packet size for the channel.
-
-    * **data** - _object_ - The properties available depend on `type`:
-
-        * `x11` (server->client):
-
-            * **srcIP** - _string_ - Source IP address of X11 connection request.
-
-            * **srcPort** - _string_ - Source port of X11 connection request.
-
-        * `forwarded-tcpip` (server->client):
-
-            * **srcIP** - _string_ - Source IP address of incoming connection.
-
-            * **srcPort** - _string_ - Source port of incoming connection.
-
-            * **destIP** - _string_ - Destination IP address of incoming connection.
-
-            * **destPort** - _string_ - Destination port of incoming connection.
-
-        * `direct-tcpip` (client->server):
-
-            * **srcIP** - _string_ - Source IP address of outgoing connection.
-
-            * **srcPort** - _string_ - Source port of outgoing connection.
-
-            * **destIP** - _string_ - Destination IP address of outgoing connection.
-
-            * **destPort** - _string_ - Destination port of outgoing connection.
-
-        * `forwarded-streamlocal@openssh.com` (server->client):
-
-            * **socketPath** - _string_ - Source socket path of incoming connection.
-
-        * `direct-streamlocal@openssh.com` (client->server):
-
-            * **socketPath** - _string_ - Destination socket path of outgoing connection.
-
-        * `session` (client->server) has no extra data.
-
-        * `auth-agent@openssh.com` (server->client) has no extra data.
-
 * **DISCONNECT**(< _string_ >reason, < _integer_ >reasonCode, < _string_ >description)
 
 * **DEBUG**(< _string_ >message)
@@ -160,6 +110,40 @@ SSH2Stream events
 * **REQUEST_SUCCESS**([< _Buffer_ >resData])
 
 * **REQUEST_FAILURE**()
+
+* **CHANNEL_OPEN**(< _object_ >channelInfo) - `channelInfo` contains:
+
+    * **type** - _string_ - The channel type (e.g. `x11`, `forwarded-tcpip`).
+
+    * **sender** - _integer_ - The remote party's channel number.
+
+    * **window** - _integer_ - The initial window size for the channel.
+
+    * **packetSize** - _integer_ - The maximum packet size for the channel.
+
+    * **data** - _object_ - The properties available depend on `type`:
+
+        * `x11`:
+
+            * **srcIP** - _string_ - Source IP address of X11 connection request.
+
+            * **srcPort** - _string_ - Source port of X11 connection request.
+
+        * `forwarded-tcpip`:
+
+            * **srcIP** - _string_ - Source IP address of incoming connection.
+
+            * **srcPort** - _string_ - Source port of incoming connection.
+
+            * **destIP** - _string_ - Destination IP address of incoming connection.
+
+            * **destPort** - _string_ - Destination port of incoming connection.
+
+        * `forwarded-streamlocal@openssh.com`:
+
+            * **socketPath** - _string_ - Source socket path of incoming connection.
+
+        * `auth-agent@openssh.com` has no extra data.
 
 * **CHANNEL_REQUEST:<channel>**(< _object_ >reqInfo) - `reqInfo` properties depend on `reqInfo.request`:
 
@@ -205,13 +189,41 @@ SSH2Stream events
 
         * **bindPort** - _string_ - The port to start/stop binding to.
 
-    * For `streamlocal-forward`/`cancel-streamlocal-forward`, it's an _object_ containing:
+    * For `streamlocal-forward@openssh.com`/`cancel-streamlocal-forward@openssh.com`, it's an _object_ containing:
 
         * **socketPath** - _string_ - The socket path to start/stop listening on.
 
     * For `no-more-sessions@openssh.com`, there is no `reqData`.
 
     * For any other requests, it's a _Buffer_ containing the raw request-specific data.
+
+* **CHANNEL_OPEN**(< _object_ >channelInfo) - `channelInfo` contains:
+
+    * **type** - _string_ - The channel type (e.g. `session`, `direct-tcpip`).
+
+    * **sender** - _integer_ - The remote party's channel number.
+
+    * **window** - _integer_ - The initial window size for the channel.
+
+    * **packetSize** - _integer_ - The maximum packet size for the channel.
+
+    * **data** - _object_ - The properties available depend on `type`:
+
+        * `direct-tcpip`:
+
+            * **srcIP** - _string_ - Source IP address of outgoing connection.
+
+            * **srcPort** - _string_ - Source port of outgoing connection.
+
+            * **destIP** - _string_ - Destination IP address of outgoing connection.
+
+            * **destPort** - _string_ - Destination port of outgoing connection.
+
+        * `direct-streamlocal@openssh.com`:
+
+            * **socketPath** - _string_ - Destination socket path of outgoing connection.
+
+        * `session` has no extra data.
 
 * **CHANNEL_REQUEST:<channel>**(< _object_ >reqInfo) - `reqInfo` properties depend on `reqInfo.request`:
 
@@ -352,7 +364,7 @@ SSH2Stream methods
 
 * **session**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket) - _boolean_ - Writes a session channel open packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
-* **agentForward**(< _integer_ >channel[, < _boolean_ >wantReply]) - _boolean_ - Writes an `auth-agent-req@openssh.com` channel request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **openssh_agentForward**(< _integer_ >channel[, < _boolean_ >wantReply]) - _boolean_ - Writes an `auth-agent-req@openssh.com` channel request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
 * **windowChange**(< _integer_ >channel, < _integer_ >rows, < _integer_ >cols, < _integer_ >height, < _integer_ >width) - _boolean_ - Writes a window change channel request packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
@@ -404,7 +416,11 @@ SSH2Stream methods
 
 * **requestFailure**() - _boolean_ - Writes a request failure packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
-* **forwardedTcpip**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _string_ >bindAddr, < _integer_ >bindPort, < _string_ >remoteAddr, < _integer_ >remotePort) - _boolean_ - Writes a forwarded tcpip channel open packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **forwardedTcpip**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _object_ >info) - _boolean_ - Writes a forwarded tcpip channel open packet. `info` must contain `boundAddr`, `boundPort`, `remoteAddr`, and `remotePort`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+
+* **x11**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _object_ >info) - _boolean_ - Writes an X11 channel open packet. `info` must contain `originAddr` and `originPort`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+
+* **openssh_forwardedStreamLocal**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _object_ >info) - _boolean_ - Writes an forwarded-streamlocal@openssh.com channel open packet. `info` must contain `socketPath`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
 * **channelSuccess**() - _boolean_ - Writes a channel success packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
@@ -413,8 +429,6 @@ SSH2Stream methods
 * **exitStatus**(< _integer_ >channel, < _integer_ >exitCode) - _boolean_ - Writes an exit status channel request packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
 * **exitSignal**(< _integer_ >channel, < _string_ >signalName, < _boolean_ >coreDumped, < _string_ >errorMessage) - _boolean_ - Writes an exit signal channel request packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
-
-* **x11**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _string_ >originAddr, < _integer_ >originPort) - _boolean_ - Writes an X11 channel open packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
 
 
