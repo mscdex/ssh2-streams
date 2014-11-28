@@ -1,4 +1,5 @@
-var SSH2Stream = require('../lib/ssh');
+var SSH2Stream = require('../lib/ssh'),
+    constants = require('../lib/constants');
 
 var fs = require('fs'),
     path = require('path'),
@@ -139,6 +140,42 @@ var tests = [
       client.push(new Buffer([0x00, 0x00, 0x00, 0x01]));
     },
     what: 'Bad packet length (min)'
+  },
+  { run: function() {
+      var what = this.what,
+          serverError = false,
+          server = new SSH2Stream({ server: true, privateKey: HOST_KEY_RSA }),
+          client = new SimpleStream();
+
+      client.pipe(server).pipe(client);
+
+      server.on('error', function(err) {
+        serverError = err;
+        assert(err.message === 'Malformed packet',
+               makeMsg(what, 'Wrong error message'));
+      }).on('end', function() {
+        assert(client.buffer.length, makeMsg(what, 'Expected server data'));
+        assert(serverError, makeMsg(what, 'Expected server error'));
+        next();
+      });
+      client.push('SSH-2.0-asdf\r\n');
+      client.push(new Buffer([
+        0x00, 0x00, 0x00, 0x1C, // packet_length
+
+        0x06, // padding_length
+
+        // payload ======
+        constants.MESSAGE.KEXINIT,
+        0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+        0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+        0x00, 0x00, 0x00, 0xFF,
+        // payload ======
+
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00 // padding
+        // no MAC
+      ]));
+    },
+    what: 'Bad string length'
   },
 ];
 
