@@ -108,7 +108,27 @@ var tests = [
       // 500,000 byte packet_length
       client.push(new Buffer([0x00, 0x07, 0xA1, 0x20]));
     },
-    what: 'Max packet length exceeded'
+    what: 'Bad packet length (max)'
+  },
+  { run: function() {
+      var what = this.what,
+          serverError = false,
+          server = new SSH2Stream({ server: true, privateKey: HOST_KEY_RSA }),
+          client = new SimpleStream();
+
+      client.pipe(server).pipe(client);
+
+      server.on('error', function(err) {
+        serverError = err;
+      }).on('end', function() {
+        assert(client.buffer.length, makeMsg(what, 'Expected server data'));
+        assert(serverError, makeMsg(what, 'Expected server error'));
+        next();
+      });
+      client.push('SSH-2.0-asdf\r\n');
+      client.push(new Buffer([0x00, 0x00, 0x00, 0x01]));
+    },
+    what: 'Bad packet length (min)'
   },
 ];
 
