@@ -47,21 +47,21 @@ SSH2Stream events
 
     * **comments** - _string_ - Any additional text that comes after the software name.
 
-* **CHANNEL_DATA:<channel>**(< _Buffer_ >data)
+* **CHANNEL_DATA:\<channel\>**(< _Buffer_ >data)
 
-* **CHANNEL_EXTENDED_DATA:<channel>**(< _integer_ >type, < _Buffer_ >data)
+* **CHANNEL_EXTENDED_DATA:\<channel\>**(< _integer_ >type, < _Buffer_ >data)
 
-* **CHANNEL_WINDOW_ADJUST:<channel>**(< _integer_ >bytesToAdd)
+* **CHANNEL_WINDOW_ADJUST:\<channel\>**(< _integer_ >bytesToAdd)
 
-* **CHANNEL_SUCCESS:<channel>**()
+* **CHANNEL_SUCCESS:\<channel\>**()
 
-* **CHANNEL_FAILURE:<channel>**()
+* **CHANNEL_FAILURE:\<channel\>**()
 
-* **CHANNEL_EOF:<channel>**()
+* **CHANNEL_EOF:\<channel\>**()
 
-* **CHANNEL_CLOSE:<channel>**()
+* **CHANNEL_CLOSE:\<channel\>**()
 
-* **CHANNEL_OPEN_CONFIRMATION:<channel>**(< _object_ >channelInfo) - `channelInfo` contains:
+* **CHANNEL_OPEN_CONFIRMATION:\<channel\>**(< _object_ >channelInfo) - `channelInfo` contains:
 
     * **recipient** - _integer_ - The local channel number.
 
@@ -71,7 +71,7 @@ SSH2Stream events
 
     * **packetSize** - _integer_ - The maximum packet size for the channel.
 
-* **CHANNEL_OPEN_FAILURE:<channel>**(< _object_ >failInfo) - `failInfo` contains:
+* **CHANNEL_OPEN_FAILURE:\<channel\>**(< _object_ >failInfo) - `failInfo` contains:
 
     * **recipient** - _integer_ - The local channel number.
 
@@ -145,7 +145,7 @@ SSH2Stream events
 
         * `auth-agent@openssh.com` has no extra data.
 
-* **CHANNEL_REQUEST:<channel>**(< _object_ >reqInfo) - `reqInfo` properties depend on `reqInfo.request`:
+* **CHANNEL_REQUEST:\<channel\>**(< _object_ >reqInfo) - `reqInfo` properties depend on `reqInfo.request`:
 
     * `exit-status`:
 
@@ -225,7 +225,7 @@ SSH2Stream events
 
         * `session` has no extra data.
 
-* **CHANNEL_REQUEST:<channel>**(< _object_ >reqInfo) - `reqInfo` properties depend on `reqInfo.request`:
+* **CHANNEL_REQUEST:\<channel\>**(< _object_ >reqInfo) - `reqInfo` properties depend on `reqInfo.request`:
 
     * `pty-req`:
 
