@@ -34,6 +34,8 @@ var tests = [
 
       server.on('error', function(err) {
         serverError = err;
+        assert(err.message === 'Protocol version not supported',
+               makeMsg(what, 'Wrong error message'));
       }).on('end', function() {
         assert(client.buffer === server.config.ident + '\r\n',
                makeMsg(what, 'Wrong server ident: ' + inspect(client.buffer)));
@@ -55,6 +57,8 @@ var tests = [
 
       server.on('error', function(err) {
         serverError = err;
+        assert(err.message === 'Bad identification start',
+               makeMsg(what, 'Wrong error message'));
       }).on('end', function() {
         assert(client.buffer === server.config.ident + '\r\n',
                makeMsg(what, 'Wrong server ident: ' + inspect(client.buffer)));
@@ -75,6 +79,8 @@ var tests = [
 
       server.on('error', function(err) {
         serverError = err;
+        assert(err.message === 'Max identification string size exceeded',
+               makeMsg(what, 'Wrong error message'));
       }).on('end', function() {
         assert(client.buffer === server.config.ident + '\r\n',
                makeMsg(what, 'Wrong server ident: ' + inspect(client.buffer)));
@@ -99,6 +105,8 @@ var tests = [
 
       server.on('error', function(err) {
         serverError = err;
+        assert(err.message === 'Bad packet length',
+               makeMsg(what, 'Wrong error message'));
       }).on('end', function() {
         assert(client.buffer.length, makeMsg(what, 'Expected server data'));
         assert(serverError, makeMsg(what, 'Expected server error'));
@@ -120,6 +128,8 @@ var tests = [
 
       server.on('error', function(err) {
         serverError = err;
+        assert(err.message === 'Bad packet length',
+               makeMsg(what, 'Wrong error message'));
       }).on('end', function() {
         assert(client.buffer.length, makeMsg(what, 'Expected server data'));
         assert(serverError, makeMsg(what, 'Expected server error'));
