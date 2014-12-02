@@ -7,7 +7,8 @@
   "dependencies": {
     "readable-stream": "~1.0.0",
     "streamsearch": "0.1.2",
-    "asn1": "~0.2.0"
+    "asn1": "~0.2.0",
+    "jsbn": "*"
   },
   "scripts": {
     "test": "node test/test.js"
