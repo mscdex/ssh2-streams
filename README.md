@@ -47,6 +47,8 @@ SSH2Stream events
 
     * **comments** - _string_ - Any additional text that comes after the software name.
 
+* **GLOBAL_REQUEST**(< _string_ >reqName, < _boolean_ >wantReply, < _mixed_ >reqData)
+
 * **CHANNEL_DATA:\<channel\>**(< _Buffer_ >data)
 
 * **CHANNEL_EXTENDED_DATA:\<channel\>**(< _integer_ >type, < _Buffer_ >data)
@@ -87,6 +89,10 @@ SSH2Stream events
 
 * **NEWKEYS**()
 
+* **REQUEST_SUCCESS**([< _Buffer_ >resData])
+
+* **REQUEST_FAILURE**()
+
 
 
 **Client-only events**
@@ -106,10 +112,6 @@ SSH2Stream events
 * **USERAUTH_FAILURE**(< _array_ >methodsContinue, < _boolean_ >partialSuccess)
 
 * **USERAUTH_BANNER**(< _string_ >message)
-
-* **REQUEST_SUCCESS**([< _Buffer_ >resData])
-
-* **REQUEST_FAILURE**()
 
 * **CHANNEL_OPEN**(< _object_ >channelInfo) - `channelInfo` contains:
 
@@ -334,6 +336,14 @@ SSH2Stream methods
 
 * **disconnect**([< _integer_ >reasonCode]) - _boolean_ - Writes a disconnect packet and closes the stream. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
+* **requestSuccess**([< _Buffer_ >data]) - _boolean_ - Writes a request success packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+
+* **requestFailure**() - _boolean_ - Writes a request failure packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+
+* **channelSuccess**() - _boolean_ - Writes a channel success packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+
+* **channelFailure**() - _boolean_ - Writes a channel failure packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+
 * **channelEOF**(< _integer_ >channel) - _boolean_ - Writes a channel EOF packet for the given `channel`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
 * **channelClose**(< _integer_ >channel) - _boolean_ - Writes a channel close packet for the given `channel`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
@@ -422,19 +432,11 @@ SSH2Stream methods
 
 * **authInfoReq**(< _string_ >name, < _string_ >instructions, < _array_ >prompts) - _boolean_ - Writes a userauth info request packet. `prompts` is an array of `{ prompt: 'Prompt text', echo: true }` objects (`prompt` being the prompt text and `echo` indicating whether the client's response to the prompt should be echoed to their display). Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
-* **requestSuccess**([< _Buffer_ >data]) - _boolean_ - Writes a request success packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
-
-* **requestFailure**() - _boolean_ - Writes a request failure packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
-
 * **forwardedTcpip**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _object_ >info) - _boolean_ - Writes a forwarded tcpip channel open packet. `info` must contain `boundAddr`, `boundPort`, `remoteAddr`, and `remotePort`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
 * **x11**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _object_ >info) - _boolean_ - Writes an X11 channel open packet. `info` must contain `originAddr` and `originPort`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
 * **openssh_forwardedStreamLocal**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _object_ >info) - _boolean_ - Writes an forwarded-streamlocal@openssh.com channel open packet. `info` must contain `socketPath`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
-
-* **channelSuccess**() - _boolean_ - Writes a channel success packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
-
-* **channelFailure**() - _boolean_ - Writes a channel failure packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
 * **exitStatus**(< _integer_ >channel, < _integer_ >exitCode) - _boolean_ - Writes an exit status channel request packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
