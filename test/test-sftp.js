@@ -682,7 +682,7 @@ var tests = [
           server.status(id, STATUS_CODE.OK);
           server.end();
         });
-        client.symlink(linkPath_, targetPath_, function(err) {
+        client.symlink(targetPath_, linkPath_, function(err) {
           assert(++self.state.responses === 1,
                  makeMsg(what, 'Saw too many responses'));
           assert(!err, makeMsg(what, 'Unexpected symlink() error: ' + err));
