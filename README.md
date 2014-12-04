@@ -201,7 +201,7 @@ SSH2Stream events
 
     * For `no-more-sessions@openssh.com`, there is no `reqData`.
 
-    * For any other requests, it's a _Buffer_ containing the raw request-specific data.
+    * For any other requests, it's a _Buffer_ containing raw request-specific data *if* there is any extra data.
 
 * **CHANNEL_OPEN**(< _object_ >channelInfo) - `channelInfo` contains:
 
@@ -330,7 +330,7 @@ SSH2Stream methods
 
 **Client/Server methods**
 
-* **ping**() - _boolean_ - Writes a ping packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **ping**() - _boolean_ - Writes a dummy GLOBAL_REQUEST packet (specifically "keepalive@openssh.com") that requests a reply. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
 * **disconnect**([< _integer_ >reasonCode]) - _boolean_ - Writes a disconnect packet and closes the stream. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
