@@ -344,6 +344,8 @@ SSH2Stream methods
 
 * **disconnect**([< _integer_ >reasonCode]) - _boolean_ - Writes a disconnect packet and closes the stream. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
+* **rekey**() - _boolean_ - Starts the re-keying process. Incoming/Outgoing packets are buffered until the re-keying process has finished. Returns `false` to indicate that no more packets should be written until the `NEWKEYS` event is seen.
+
 * **requestSuccess**([< _Buffer_ >data]) - _boolean_ - Writes a request success packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
 
 * **requestFailure**() - _boolean_ - Writes a request failure packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
