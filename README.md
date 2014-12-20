@@ -43,7 +43,7 @@ SSH2Stream events
 
         * **protocol** - _string_ - The protocol version (always `1.99` or `2.0`) supported by the remote party.
 
-        * **software** - _boolean_ - The software name used by the remote party.
+        * **software** - _string_ - The software name used by the remote party.
 
     * **comments** - _string_ - Any additional text that comes after the software name.
 
