@@ -310,9 +310,9 @@ SSH2Stream events
 SSH2Stream properties
 ---------------------
 
-* **bytesSent** - _integer_ - The number of bytes sent since the last keying. This is metric can be useful in determining when to call `rekey()`.
+* **bytesSent** - _integer_ - The number of bytes sent since the last keying. This metric can be useful in determining when to call `rekey()`.
 
-* **bytesReceived** - _integer_ - The number of bytes received since the last keying. This is metric can be useful in determining when to call `rekey()`.
+* **bytesReceived** - _integer_ - The number of bytes received since the last keying. This metric can be useful in determining when to call `rekey()`.
 
 
 SSH2Stream methods
