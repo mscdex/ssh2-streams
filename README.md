@@ -340,75 +340,75 @@ SSH2Stream methods
 
 **Client/Server methods**
 
-* **ping**() - _boolean_ - Writes a dummy GLOBAL_REQUEST packet (specifically "keepalive@openssh.com") that requests a reply. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **ping**() - _boolean_ - Writes a dummy GLOBAL_REQUEST packet (specifically "keepalive@openssh.com") that requests a reply. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **disconnect**([< _integer_ >reasonCode]) - _boolean_ - Writes a disconnect packet and closes the stream. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **disconnect**([< _integer_ >reasonCode]) - _boolean_ - Writes a disconnect packet and closes the stream. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
 * **rekey**() - _boolean_ - Starts the re-keying process. Incoming/Outgoing packets are buffered until the re-keying process has finished. Returns `false` to indicate that no more packets should be written until the `NEWKEYS` event is seen.
 
-* **requestSuccess**([< _Buffer_ >data]) - _boolean_ - Writes a request success packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **requestSuccess**([< _Buffer_ >data]) - _boolean_ - Writes a request success packet. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **requestFailure**() - _boolean_ - Writes a request failure packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **requestFailure**() - _boolean_ - Writes a request failure packet. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **channelSuccess**() - _boolean_ - Writes a channel success packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **channelSuccess**() - _boolean_ - Writes a channel success packet. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **channelFailure**() - _boolean_ - Writes a channel failure packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **channelFailure**() - _boolean_ - Writes a channel failure packet. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **channelEOF**(< _integer_ >channel) - _boolean_ - Writes a channel EOF packet for the given `channel`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **channelEOF**(< _integer_ >channel) - _boolean_ - Writes a channel EOF packet for the given `channel`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **channelClose**(< _integer_ >channel) - _boolean_ - Writes a channel close packet for the given `channel`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **channelClose**(< _integer_ >channel) - _boolean_ - Writes a channel close packet for the given `channel`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **channelWindowAdjust**(< _integer_ >channel, < _integer_ >amount) - _boolean_ - Writes a channel window adjust packet for the given `channel` where `amount` is the number of bytes to add to the channel window. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **channelWindowAdjust**(< _integer_ >channel, < _integer_ >amount) - _boolean_ - Writes a channel window adjust packet for the given `channel` where `amount` is the number of bytes to add to the channel window. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **channelData**(< _integer_ >channel, < _mixed_ >data) - _boolean_ - Writes a channel data packet for the given `channel` where `data` is a _Buffer_ or _string_. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **channelData**(< _integer_ >channel, < _mixed_ >data) - _boolean_ - Writes a channel data packet for the given `channel` where `data` is a _Buffer_ or _string_. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **channelExtData**(< _integer_ >channel, < _mixed_ >data, < _integer_ >type) - _boolean_ - Writes a channel extended data packet for the given `channel` where `data is a _Buffer_ or _string_. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **channelExtData**(< _integer_ >channel, < _mixed_ >data, < _integer_ >type) - _boolean_ - Writes a channel extended data packet for the given `channel` where `data is a _Buffer_ or _string_. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **channelOpenConfirm**(< _integer_ >remoteChannel, < _integer_ >localChannel, < _integer_ >initWindow, < _integer_ >maxPacket) - _boolean_ - Writes a channel open confirmation packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **channelOpenConfirm**(< _integer_ >remoteChannel, < _integer_ >localChannel, < _integer_ >initWindow, < _integer_ >maxPacket) - _boolean_ - Writes a channel open confirmation packet. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **channelOpenFail**(< _integer_ >remoteChannel, < _integer_ >reasonCode[, < _string_ >description]) - _boolean_ - Writes a channel open failure packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **channelOpenFail**(< _integer_ >remoteChannel, < _integer_ >reasonCode[, < _string_ >description]) - _boolean_ - Writes a channel open failure packet. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
 
 
 **Client-only methods**
 
-* **service**(< _string_ >serviceName) - _boolean_ - Writes a service request packet for `serviceName`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **service**(< _string_ >serviceName) - _boolean_ - Writes a service request packet for `serviceName`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **tcpipForward**(< _string_ >bindAddr, < _integer_ >bindPort[, < _boolean_ >wantReply]) - _boolean_ - Writes a tcpip forward global request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **tcpipForward**(< _string_ >bindAddr, < _integer_ >bindPort[, < _boolean_ >wantReply]) - _boolean_ - Writes a tcpip forward global request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **cancelTcpipForward**(< _string_ >bindAddr, < _integer_ >bindPort[, < _boolean_ >wantReply]) - _boolean_ - Writes a cancel tcpip forward global request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **cancelTcpipForward**(< _string_ >bindAddr, < _integer_ >bindPort[, < _boolean_ >wantReply]) - _boolean_ - Writes a cancel tcpip forward global request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **authPassword**(< _string_ >username, < _string_ >password) - _boolean_ - Writes a password userauth request packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **authPassword**(< _string_ >username, < _string_ >password) - _boolean_ - Writes a password userauth request packet. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **authPK**(< _string_ >username, < _object_ >pubKey[, < _function_ >cbSign]) - _boolean_ - Writes a publickey userauth request packet. `pubKey` is the object returned from using `utils.parseKey()` on a private or public key. If `cbSign` is not present, a pubkey check userauth packet is written. Otherwise `cbSign` is called with `(blob, callback)`, where `blob` is the data to sign with the private key and the resulting signature _Buffer_ is passed to `callback` as the first argument. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **authPK**(< _string_ >username, < _object_ >pubKey[, < _function_ >cbSign]) - _boolean_ - Writes a publickey userauth request packet. `pubKey` is the object returned from using `utils.parseKey()` on a private or public key. If `cbSign` is not present, a pubkey check userauth packet is written. Otherwise `cbSign` is called with `(blob, callback)`, where `blob` is the data to sign with the private key and the resulting signature _Buffer_ is passed to `callback` as the first argument. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **authHostbased**(< _string_ >username, < _object_ >pubKey, < _string_ >localHostname, < _string_ >localUsername, < _function_ >cbSign) - _boolean_ - Writes a hostbased userauth request packet. `pubKey` is the object returned from using `utils.parseKey()` on a private or public key. `cbSign` is called with `(blob, callback)`, where `blob` is the data to sign with the private key and the resulting signature _Buffer_ is passed to `callback` as the first argument. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **authHostbased**(< _string_ >username, < _object_ >pubKey, < _string_ >localHostname, < _string_ >localUsername, < _function_ >cbSign) - _boolean_ - Writes a hostbased userauth request packet. `pubKey` is the object returned from using `utils.parseKey()` on a private or public key. `cbSign` is called with `(blob, callback)`, where `blob` is the data to sign with the private key and the resulting signature _Buffer_ is passed to `callback` as the first argument. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **authKeyboard**(< _string_ >username) - _boolean_ - Writes a keyboard-interactive userauth request packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **authKeyboard**(< _string_ >username) - _boolean_ - Writes a keyboard-interactive userauth request packet. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **authNone**(< _string_ >username) - _boolean_ - Writes a "none" userauth request packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **authNone**(< _string_ >username) - _boolean_ - Writes a "none" userauth request packet. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **authInfoRes**(< _array_ >responses) - _boolean_ - Writes a userauth info response packet. `responses` is an _array_ of zero or more strings corresponding to responses to prompts previously sent by the server. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **authInfoRes**(< _array_ >responses) - _boolean_ - Writes a userauth info response packet. `responses` is an _array_ of zero or more strings corresponding to responses to prompts previously sent by the server. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **directTcpip**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _object_ >config) - _boolean_ - Writes a direct tcpip channel open packet. `config` must contain `srcIP`, `srcPort`, `dstIP`, and `dstPort`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **directTcpip**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _object_ >config) - _boolean_ - Writes a direct tcpip channel open packet. `config` must contain `srcIP`, `srcPort`, `dstIP`, and `dstPort`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **session**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket) - _boolean_ - Writes a session channel open packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **session**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket) - _boolean_ - Writes a session channel open packet. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **openssh_agentForward**(< _integer_ >channel[, < _boolean_ >wantReply]) - _boolean_ - Writes an `auth-agent-req@openssh.com` channel request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **openssh_agentForward**(< _integer_ >channel[, < _boolean_ >wantReply]) - _boolean_ - Writes an `auth-agent-req@openssh.com` channel request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **windowChange**(< _integer_ >channel, < _integer_ >rows, < _integer_ >cols, < _integer_ >height, < _integer_ >width) - _boolean_ - Writes a window change channel request packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **windowChange**(< _integer_ >channel, < _integer_ >rows, < _integer_ >cols, < _integer_ >height, < _integer_ >width) - _boolean_ - Writes a window change channel request packet. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **pty**(< _integer_ >channel, < _integer_ >rows, < _integer_ >cols, < _integer_ >height, < _integer_ >width, < _string_ >terminalType, < _mixed_ >terminalModes[, < _boolean_ >wantReply]) - _boolean_ - Writes a pty channel request packet. If `terminalType` is falsey, `vt100` is used. `terminalModes` can be the raw bytes, an _object_ of the terminal modes to set, or a falsey value for no modes. `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **pty**(< _integer_ >channel, < _integer_ >rows, < _integer_ >cols, < _integer_ >height, < _integer_ >width, < _string_ >terminalType, < _mixed_ >terminalModes[, < _boolean_ >wantReply]) - _boolean_ - Writes a pty channel request packet. If `terminalType` is falsey, `vt100` is used. `terminalModes` can be the raw bytes, an _object_ of the terminal modes to set, or a falsey value for no modes. `wantReply` defaults to `true`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **env**(< _integer_ >channel, < _string_ >key, < _mixed_ >value[, < _boolean_ >wantReply]) - _boolean_ - Writes an env channel request packet. `value` can be a _string_ or _Buffer_. `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **env**(< _integer_ >channel, < _string_ >key, < _mixed_ >value[, < _boolean_ >wantReply]) - _boolean_ - Writes an env channel request packet. `value` can be a _string_ or _Buffer_. `wantReply` defaults to `true`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **shell**(< _integer_ >channel[, < _boolean_ >wantReply]) - _boolean_ - Writes a shell channel request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **shell**(< _integer_ >channel[, < _boolean_ >wantReply]) - _boolean_ - Writes a shell channel request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **exec**(< _integer_ >channel, < _string_ >command[, < _boolean_ >wantReply]) - _boolean_ - Writes an exec channel request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **exec**(< _integer_ >channel, < _string_ >command[, < _boolean_ >wantReply]) - _boolean_ - Writes an exec channel request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **signal**(< _integer_ >channel, < _string_ >signalName) - _boolean_ - Writes a signal channel request packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **signal**(< _integer_ >channel, < _string_ >signalName) - _boolean_ - Writes a signal channel request packet. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **x11Forward**(< _integer_ >channel, < _object_ >config[, < _boolean_ >wantReply]) - _boolean_ - Writes an X11 forward channel request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic. `config` can contain:
+* **x11Forward**(< _integer_ >channel, < _object_ >config[, < _boolean_ >wantReply]) - _boolean_ - Writes an X11 forward channel request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `continue` event before sending any more traffic. `config` can contain:
 
     * **single** - _boolean_ - `true` if only a single connection should be forwarded.
 
@@ -418,39 +418,39 @@ SSH2Stream methods
 
     * **screen** - _integer_ - The screen number to forward X11 connections for.
 
-* **subsystem**(< _integer_ >channel, < _string_ >name[, < _boolean_ >wantReply]) - _boolean_ - Writes a subsystem channel request packet. `name` is the name of the subsystem (e.g. `sftp` or `netconf`). `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **subsystem**(< _integer_ >channel, < _string_ >name[, < _boolean_ >wantReply]) - _boolean_ - Writes a subsystem channel request packet. `name` is the name of the subsystem (e.g. `sftp` or `netconf`). `wantReply` defaults to `true`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **openssh_noMoreSessions**([< _boolean_ >wantReply]) - _boolean_ - Writes a no-more-sessions@openssh.com request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **openssh_noMoreSessions**([< _boolean_ >wantReply]) - _boolean_ - Writes a no-more-sessions@openssh.com request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **openssh_streamLocalForward**(< _string_ >socketPath[, < _boolean_ >wantReply]) - _boolean_ - Writes a streamlocal-forward@openssh.com request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **openssh_streamLocalForward**(< _string_ >socketPath[, < _boolean_ >wantReply]) - _boolean_ - Writes a streamlocal-forward@openssh.com request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **openssh_cancelStreamLocalForward**(< _string_ >socketPath[, < _boolean_ >wantReply]) - _boolean_ - Writes a cancel-streamlocal-forward@openssh.com request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **openssh_cancelStreamLocalForward**(< _string_ >socketPath[, < _boolean_ >wantReply]) - _boolean_ - Writes a cancel-streamlocal-forward@openssh.com request packet. `wantReply` defaults to `true`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **openssh_directStreamLocal**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _object_ >config) - _boolean_ - Writes a direct-streamlocal@openssh.com channel open packet. `config` must contain `socketPath`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **openssh_directStreamLocal**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _object_ >config) - _boolean_ - Writes a direct-streamlocal@openssh.com channel open packet. `config` must contain `socketPath`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
 
 
 **Server-only methods**
 
-* **serviceAccept**(< _string_ >serviceName) - _boolean_ - Writes a service accept packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **serviceAccept**(< _string_ >serviceName) - _boolean_ - Writes a service accept packet. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **authFailure**([< _array_ >authMethods[, < _boolean_ >partialSuccess]]) - _boolean_ - Writes a userauth failure packet. `authMethods` is an _array_ of authentication methods that can continue. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **authFailure**([< _array_ >authMethods[, < _boolean_ >partialSuccess]]) - _boolean_ - Writes a userauth failure packet. `authMethods` is an _array_ of authentication methods that can continue. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **authSuccess**() - _boolean_ - Writes a userauth success packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **authSuccess**() - _boolean_ - Writes a userauth success packet. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **authPKOK**(< _string_ >keyAlgorithm, < _Buffer_ >keyData) - _boolean_ - Writes a userauth PK OK packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **authPKOK**(< _string_ >keyAlgorithm, < _Buffer_ >keyData) - _boolean_ - Writes a userauth PK OK packet. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **authInfoReq**(< _string_ >name, < _string_ >instructions, < _array_ >prompts) - _boolean_ - Writes a userauth info request packet. `prompts` is an array of `{ prompt: 'Prompt text', echo: true }` objects (`prompt` being the prompt text and `echo` indicating whether the client's response to the prompt should be echoed to their display). Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **authInfoReq**(< _string_ >name, < _string_ >instructions, < _array_ >prompts) - _boolean_ - Writes a userauth info request packet. `prompts` is an array of `{ prompt: 'Prompt text', echo: true }` objects (`prompt` being the prompt text and `echo` indicating whether the client's response to the prompt should be echoed to their display). Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **forwardedTcpip**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _object_ >info) - _boolean_ - Writes a forwarded tcpip channel open packet. `info` must contain `boundAddr`, `boundPort`, `remoteAddr`, and `remotePort`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **forwardedTcpip**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _object_ >info) - _boolean_ - Writes a forwarded tcpip channel open packet. `info` must contain `boundAddr`, `boundPort`, `remoteAddr`, and `remotePort`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **x11**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _object_ >info) - _boolean_ - Writes an X11 channel open packet. `info` must contain `originAddr` and `originPort`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **x11**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _object_ >info) - _boolean_ - Writes an X11 channel open packet. `info` must contain `originAddr` and `originPort`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **openssh_forwardedStreamLocal**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _object_ >info) - _boolean_ - Writes an forwarded-streamlocal@openssh.com channel open packet. `info` must contain `socketPath`. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **openssh_forwardedStreamLocal**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _object_ >info) - _boolean_ - Writes an forwarded-streamlocal@openssh.com channel open packet. `info` must contain `socketPath`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **exitStatus**(< _integer_ >channel, < _integer_ >exitCode) - _boolean_ - Writes an exit status channel request packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **exitStatus**(< _integer_ >channel, < _integer_ >exitCode) - _boolean_ - Writes an exit status channel request packet. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **exitSignal**(< _integer_ >channel, < _string_ >signalName, < _boolean_ >coreDumped, < _string_ >errorMessage) - _boolean_ - Writes an exit signal channel request packet. Returns `false` if you should wait for the `drain` event before sending any more traffic.
+* **exitSignal**(< _integer_ >channel, < _string_ >signalName, < _boolean_ >coreDumped, < _string_ >errorMessage) - _boolean_ - Writes an exit signal channel request packet. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
 
 Utility methods

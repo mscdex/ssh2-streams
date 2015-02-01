@@ -720,12 +720,55 @@ var tests = [
       };
     },
     what: 'readdir (EOF)'
-  }
+  },
+  { run: function() {
+      setup(this);
+
+      var self = this,
+          what = this.what,
+          client = this.client,
+          server = this.server;
+
+      this.onReady = function() {
+        var path_ = '/tmp/foo.txt',
+            reqs = 0,
+            continues = 0;
+
+        client.unpipe(server);
+
+        function clientCb(err, handle) {
+          assert(++self.state.responses <= reqs,
+                 makeMsg(what, 'Saw too many responses'));
+          if (self.state.responses === reqs) {
+            assert(continues === 1, makeMsg(what, 'no continue event seen'));
+            server.end();
+          }
+        }
+
+        client.on('continue', function() {
+          assert(++continues === 1, makeMsg(what, 'saw > 1 continue event'));
+        });
+
+        while (true) {
+          ++reqs;
+          if (!client.open(path_, 'w', clientCb))
+            break;
+        }
+
+        client.pipe(server);
+      };
+    },
+    expected: {
+      requests: -1,
+      responses: -1
+    },
+    what: '"continue" event after push() === false'
+  },
 ];
 
 function setup(self) {
-  var requests = (self.expected && self.expected.requests) || 1,
-      responses = (self.expected && self.expected.responses) || 1;
+  var expectedRequests = (self.expected && self.expected.requests) || 1,
+      expectedResponses = (self.expected && self.expected.responses) || 1;
 
   self.state = {
     readies: 0,
@@ -757,10 +800,14 @@ function setup(self) {
   function onEnd() {
     assert(self.state.ends < 2, makeMsg(self.what, 'Saw too many end events'));
     if (++self.state.ends === 2) {
-      assert(self.state.requests === requests,
-             makeMsg(self.what, 'Missing request(s)'));
-      assert(self.state.responses === responses,
-             makeMsg(self.what, 'Missing response(s)'));
+      if (expectedRequests > 0) {
+        assert(self.state.requests === expectedRequests,
+               makeMsg(self.what, 'Missing request(s)'));
+      }
+      if (expectedResponses > 0) {
+        assert(self.state.responses === expectedResponses,
+               makeMsg(self.what, 'Missing response(s)'));
+      }
       next();
     }
   }
