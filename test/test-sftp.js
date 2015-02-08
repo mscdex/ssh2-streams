@@ -85,7 +85,7 @@ var tests = [
             buffer = new Buffer(expected.length);
         buffer.fill(0);
         server.on('READ', function(id, handle, offset, len) {
-          assert(++self.state.requests === 1,
+          assert(++self.state.requests <= 2,
                  makeMsg(what, 'Saw too many requests'));
           assert(id === 0, makeMsg(what, 'Wrong request id: ' + id));
           assert.deepEqual(handle, handle_, makeMsg(what, 'handle mismatch'));
@@ -94,17 +94,18 @@ var tests = [
           server.data(id, expected);
           server.end();
         });
-        client.readData(handle_, buffer, 0, buffer.length, 5, function(err) {
-          assert(++self.state.responses === 1,
+        client.readData(handle_, buffer, 0, buffer.length, 5, clientReadCb);
+        function clientReadCb(err, code) {
+          assert(++self.state.responses <= 2,
                  makeMsg(what, 'Saw too many responses'));
           assert(!err, makeMsg(what, 'Unexpected readData() error: ' + err));
           assert.deepEqual(buffer,
                            expected,
                            makeMsg(what, 'read data mismatch'));
-        });
+        }
       };
     },
-    what: 'read'
+    what: 'readData'
   },
   { run: function() {
       setup(this);
@@ -690,6 +691,61 @@ var tests = [
       };
     },
     what: 'symlink'
+  },
+  { run: function() {
+      setup(this);
+
+      var self = this,
+          what = this.what,
+          client = this.client,
+          server = this.server;
+
+      this.onReady = function() {
+        var opens = 0,
+            reads = 0,
+            closes = 0,
+            path_ = '/foo/bar/baz',
+            handle_ = new Buffer('hi mom!'),
+            data_ = new Buffer('hello world');
+        server.on('OPEN', function(id, path, pflags, attrs) {
+          assert(++opens === 1, makeMsg(what, 'Saw too many OPENs'));
+          assert(id === 0, makeMsg(what, 'Wrong request id: ' + id));
+          assert(path === path_, makeMsg(what, 'Wrong path: ' + path));
+          assert(pflags === OPEN_MODE.READ,
+                 makeMsg(what, 'Wrong flags: ' + flagsToHuman(pflags)));
+          server.handle(id, handle_);
+        }).on('READ', function(id, handle, offset, len) {
+          assert(++reads <= 2, makeMsg(what, 'Saw too many READs'));
+          assert(id === reads, makeMsg(what, 'Wrong request id: ' + id));
+          assert.deepEqual(handle, handle_, makeMsg(what, 'handle mismatch'));
+          if (reads === 1) {
+            assert(offset === 0, makeMsg(what, 'Wrong read offset: ' + offset));
+            server.data(id, data_);
+          } else
+            server.status(id, STATUS_CODE.EOF);
+        }).on('CLOSE', function(id, handle) {
+          ++self.state.requests;
+          assert(++closes === 1, makeMsg(what, 'Saw too many CLOSEs'));
+          assert(id === 3, makeMsg(what, 'Wrong request id: ' + id));
+          assert.deepEqual(handle, handle_, makeMsg(what, 'handle mismatch'));
+          server.status(id, STATUS_CODE.OK);
+          server.end();
+        });
+        var buf = [];
+        client.createReadStream(path_).on('readable', function() { 
+          var chunk;
+          while ((chunk = this.read()) !== null) {
+            buf.push(chunk);
+          }
+        }).on('end', function() {
+          assert(++self.state.responses === 1,
+                 makeMsg(what, 'Saw too many responses'));
+          buf = Buffer.concat(buf);
+          assert.deepEqual(buf, data_, makeMsg(what, 'data mismatch'));
+        });
+      };
+    },
+    what: 'ReadStream'
   },
 
 // other client request scenarios
