@@ -103,7 +103,7 @@ SSH2Stream events
 
 * **USERAUTH_PASSWD_CHANGEREQ**(< _string_ >message)
 
-* **USERAUTH_INFO_REQUEST**(< _string_ >name, < _string_ >instructions, < _string_ >lang[, < _array_ >prompts])
+* **USERAUTH_INFO_REQUEST**(< _string_ >name, < _string_ >instructions, < _string_ >lang, < _array_ >prompts)
 
 * **USERAUTH_PK_OK**()
 
@@ -187,7 +187,7 @@ SSH2Stream events
 
         * **localUsername** - _string_ - The client's (local) username to be verified.
 
-* **USERAUTH_INFO_RESPONSE**([< _array_ >responses])
+* **USERAUTH_INFO_RESPONSE**(< _array_ >responses)
         
 * **GLOBAL_REQUEST**(< _string_ >reqName, < _boolean_ >wantReply, < _mixed_ >reqData) - `reqData` depends on `reqName`:
 
