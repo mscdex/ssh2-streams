@@ -747,6 +747,41 @@ var tests = [
     },
     what: 'ReadStream'
   },
+  { run: function() {
+      setup(this);
+
+      var self = this,
+          what = this.what,
+          client = this.client,
+          server = this.server;
+
+      this.onReady = function() {
+        var opens = 0,
+            path_ = '/foo/bar/baz',
+            error;
+        server.on('OPEN', function(id, path, pflags, attrs) {
+          ++opens;
+          ++self.state.requests;
+          assert(id === 0, makeMsg(what, 'Wrong request id: ' + id));
+          assert(path === path_, makeMsg(what, 'Wrong path: ' + path));
+          assert(pflags === OPEN_MODE.READ,
+                 makeMsg(what, 'Wrong flags: ' + flagsToHuman(pflags)));
+          server.status(id, STATUS_CODE.NO_SUCH_FILE);
+          server.end();
+        });
+        var buf = [];
+        client.createReadStream(path_).on('error', function(err) {
+          error = err;
+        }).on('close', function() {
+          assert(opens === 1, makeMsg(what, 'Saw ' + opens + ' OPENs'));
+          assert(error, makeMsg(what, 'Expected error'));
+          assert(++self.state.responses === 1,
+                 makeMsg(what, 'Saw too many responses'));
+        });
+      };
+    },
+    what: 'ReadStream (error)'
+  },
 
 // other client request scenarios
   { run: function() {
@@ -824,11 +859,12 @@ var tests = [
 
 function setup(self) {
   var expectedRequests = (self.expected && self.expected.requests) || 1,
-      expectedResponses = (self.expected && self.expected.responses) || 1;
+      expectedResponses = (self.expected && self.expected.responses) || 1,
+      clientEnds = 0,
+      serverEnds = 0;
 
   self.state = {
     readies: 0,
-    ends: 0,
     requests: 0,
     responses: 0
   };
@@ -841,7 +877,8 @@ function setup(self) {
              .on('end', onEnd);
   self.client.on('error', onError)
              .on('ready', onReady)
-             .on('end', onEnd);
+             .on('end', onEnd)
+             .on('close', onEnd);
 
   function onError(err) {
     var which = (this === self.server ? 'server' : 'client');
@@ -854,8 +891,15 @@ function setup(self) {
       self.onReady();
   }
   function onEnd() {
-    assert(self.state.ends < 2, makeMsg(self.what, 'Saw too many end events'));
-    if (++self.state.ends === 2) {
+    if (this === self.server)
+      ++serverEnds;
+    else
+      ++clientEnds;
+    assert(serverEnds <= 1,
+           makeMsg(self.what, 'Saw too many server end events'));
+    assert(clientEnds <= 1,
+           makeMsg(self.what, 'Saw too many client end/close events'));
+    if (serverEnds + clientEnds === 2) {
       if (expectedRequests > 0) {
         assert(self.state.requests === expectedRequests,
                makeMsg(self.what, 'Missing request(s)'));
