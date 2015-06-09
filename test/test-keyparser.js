@@ -2028,13 +2028,6 @@ var group = path.basename(__filename, '.js') + '/';
 ].forEach(function(v) {
   require('buffer').INSPECT_MAX_BYTES = Infinity;
   var result = parser(v.source);
-  /*if (result.private) {
-    for (var i = 0; i < result.private.length; ++i) {
-      if (i % 12 === 0)
-        process.stdout.write('\n');
-      process.stdout.write('0x' + (result.private[i] < 16 ? '0' : '') + result.private[i].toString(16) + ', ');
-    }
-  }*/
   assert.deepEqual(result,
                    v.expected,
                    '[' + group + v.what + ']: parser output mismatch.'
