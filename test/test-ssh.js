@@ -4,16 +4,15 @@ var parseKey = utils.parseKey;
 var genPubKey = utils.genPublicKey;
 
 var basename = require('path').basename;
-var inspect = require('util').inspect;
 var assert_ = require('assert');
 var inherits = require('util').inherits;
 var TransformStream = require('stream').Transform;
+var fs = require('fs');
 
 var group = basename(__filename, '.js') + '/';
 var t = -1;
-var EMPTY_BUFFER = new Buffer(0);
-var SERVER_KEY = require('fs').readFileSync(__dirname
-                                            + '/fixtures/ssh_host_rsa_key');
+var SERVER_KEY = fs.readFileSync(__dirname + '/fixtures/ssh_host_rsa_key');
+var HOST_KEYS = { 'ssh-rsa': makeServerKey(SERVER_KEY) };
 
 function SimpleStream() {
   TransformStream.call(this);
@@ -38,7 +37,7 @@ var tests = [
       var clientReady = false;
       var server = new SSH2Stream({
         server: true,
-        hostKeys: { 'ssh-rsa': makeServerKey(SERVER_KEY) }
+        hostKeys: HOST_KEYS
       });
       var serverBufStream = new SimpleStream();
       var serverReady = false;
@@ -77,37 +76,6 @@ var tests = [
     },
     what: 'Custom algorithms'
   },
-  // server-side tests
-  { run: function() {
-      var stream = new SSH2Stream({
-        server: true,
-        hostKeys: { 'ssh-rsa': makeServerKey(SERVER_KEY) }
-      });
-      var result;
-      var expected;
-
-      var key = new Buffer('o hai mark');
-      var keyLen = key.length;
-      expected = Buffer.concat([
-        new Buffer([
-          0x3C,
-          0x00, 0x00, 0x00, 0x07,
-          0x73, 0x73, 0x68, 0x2D, 0x72, 0x73, 0x61,
-          (keyLen >>> 24) & 0xFF, (keyLen >>> 16) & 0xFF, (keyLen >>> 8) & 0xFF,
-            keyLen & 0xFF
-        ]),
-        key
-      ]);
-
-      skipIdent(stream);
-      stream.authPKOK('ssh-rsa', key);
-      result = readData(stream);
-      assertDeepEqual(result, expected);
-
-      next();
-    },
-    what: 'authPKOK'
-  },
 ];
 
 function makeServerKey(raw) {
@@ -122,46 +90,6 @@ function hexByte(n) {
   return String.fromCharCode(n);
 }
 
-function skipIdent(stream) {
-  var buf = EMPTY_BUFFER;
-  var b;
-  var i = 0;
-  while ((b = stream.read()) !== null) {
-    buf = Buffer.concat([buf, b]);
-    for (; i < buf.length; ++i) {
-      if (buf[i] === 10) {
-        if ((i + 1) < buf.length)
-          stream.unshift(buf.slice(i + 1));
-        return;
-      }
-    }
-  }
-  throw new Error('Expected ident string');
-}
-
-function readData(stream) {
-  var buf = EMPTY_BUFFER;
-  var b;
-  while ((b = stream.read()) !== null)
-    buf = Buffer.concat([buf, b]);
-  for (var i = 0, newbuf = EMPTY_BUFFER; i < buf.length;) {
-    var len = buf.readUInt32BE(i, true),
-        plen = buf[i += 4];
-    ++i;
-    newbuf = Buffer.concat([newbuf, buf.slice(i, i + (len - plen - 1))]);
-    i += (len - 1);
-  }
-  return newbuf;
-}
-
-function assertDeepEqual(actual, expected, msg) {
-  msg || (msg = 'output mismatch');
-  msg += ':\nActual:\n'
-         + inspect(actual)
-         + '\nExpected:\n'
-         + inspect(expected);
-  assert_.deepEqual(actual, expected, makeMsg(tests[t].what, msg));
-}
 function assert(expression, msg) {
   msg || (msg = 'failed assertion');
   assert_(expression, makeMsg(tests[t].what, msg));
