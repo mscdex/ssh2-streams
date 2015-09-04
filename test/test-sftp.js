@@ -877,8 +877,7 @@ function setup(self) {
              .on('end', onEnd);
   self.client.on('error', onError)
              .on('ready', onReady)
-             .on('end', onEnd)
-             .on('close', onEnd);
+             .on('end', onEnd);
 
   function onError(err) {
     var which = (this === self.server ? 'server' : 'client');
@@ -913,7 +912,6 @@ function setup(self) {
   }
 
   process.nextTick(function() {
-    process._events.exit = [ onEnd, process._events.exit ];
     self.client.pipe(self.server).pipe(self.client);
   });
 }
@@ -929,8 +927,6 @@ function flagsToHuman(flags) {
 }
 
 function next() {
-  if (Array.isArray(process._events.exit))
-    process._events.exit = process._events.exit[1];
   if (++t === tests.length)
     return;
 
