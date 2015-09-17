@@ -43,6 +43,7 @@ SFTPStream events
 
 * **SYMLINK**(< _integer_ >reqID, < _string_ >linkPath, < _string_ >targetPath)
 
+
 SFTPStream static constants
 ---------------------------
 
@@ -75,6 +76,15 @@ SFTPStream static constants
   * `TRUNC`
 
   * `EXCL`
+
+
+SFTPStream static constants
+---------------------------
+
+* **stringToFlags**(< _string_ >flagsStr) - _integer_ - Converts string flags (e.g. `'r'`, `'a+'`, etc.) to the appropriate `SFTPStream.OPEN_MODE` flag mask. Returns `null` if conversion failed.
+
+* **flagsToString**(< _integer_ >flagsMask) - _string_ - Converts flag mask (e.g. number containing `SFTPStream.OPEN_MODE` values) to the appropriate string value. Returns `null` if conversion failed.
+
 
 SFTPStream methods
 ------------------
