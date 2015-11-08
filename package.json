@@ -1,5 +1,5 @@
 { "name": "ssh2-streams",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "author": "Brian White <mscdex@mscdex.net>",
   "description": "SSH2 and SFTP(v3) client/server protocol streams for node.js",
   "main": "./index",
