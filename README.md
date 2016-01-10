@@ -322,9 +322,13 @@ SSH2Stream methods
 
     * **server** - _boolean_ - Set to `true` to create an instance in server mode. **Default:** `false`
 
-    * **privateKey** - _mixed_ - If in server mode, a _Buffer_ or _string_ that contains the **required** host private key (OpenSSH format). **Default:** (none)
+    * **privateKey** - _mixed_ - If in server mode, a _Buffer_, _string_ or _object_ that contains the **required** host private key or keys (OpenSSH format).
+For configuring a single host key any of the methods can be used.
+For configuring multiple keys for different algorithms use the _object_ type with _object_ property names corresponding to the algorithm names.**Default:** (none)
 
-    * **passphrase** - _string_ - For an encrypted host private key, this is the passphrase used to decrypt it. **Default:** (none)
+    * **passphrase** - _mixed_ - For an encrypted host private key, this is the passphrase used to decrypt it.
+It can be a _string_ or _object_.For configuring multiple passphrases use _object_ type with _object_ property names corresponding to the algorithm names.
+Same _object_ property names should be used for both privateKey and passphrase **Default:** (none)
 
     * **banner** - _string_ - If in server mode, an optional message to send to the user immediately upon connection, before the handshake. **Default:** (none)
 
