@@ -7,32 +7,54 @@ SFTPStream events
 
 **Server-only events**
 
+In all cases, responses to the various events **must** include the request's `reqID` as
+their first parameter. The `sftpStream` that the event fired on is the same object 
+that the various response methods should be invoked using.
+
 * **OPEN**(< _integer_ >reqID, < _string_ >filename, < _integer_ >flags, < _ATTRS_>attrs)
+ - respond with `sftpStream.handle()` with your newly-opened file handle. The file handle
+   should uniquely identify this opened file for this connection.
 
 * **READ**(< _integer_ >reqID, < _Buffer_ >handle, < _integer_ >offset, < _integer_ >length)
+ - respond with `sftpStream.data()` with the requested data. Respond with 
+   `sftpStream.status(ssh2.SFTP_STATUS_CODES.EOF)` if there is no more data to return.
 
 * **WRITE**(< _integer_ >reqID, < _Buffer_ >handle, < _integer_ >offset, < _Buffer_ >data)
 
 * **FSTAT**(< _integer_ >reqID, < _Buffer_ >handle)
-
+ - respond with `sftpStream.attrs()`
+ 
 * **FSETSTAT**(< _integer_ >reqID, < _Buffer_ >handle, < _ATTRS_ >attrs)
 
 * **CLOSE**(< _integer_ >reqID, < _Buffer_ >handle)
+ - respond with `sftpStream.status(ssh2.SFTP_STATUS_CODES.OK)` on success.
 
 * **OPENDIR**(< _integer_ >reqID, < _string_ >path)
+ - respond with `sftpStream.handle()` with the directory handle. That handle
+   should uniquely identify this opened directory for this client.
 
 * **READDIR**(< _integer_ >reqID, < _Buffer_ >handle)
+ - the `handle` that you responded to the `OPENDIR` event with is passed to you
+   as a second parameter to identify which directory is being read. Respond with
+   `sftpStream.name()` and an array of file entries. The event will then fire 
+   one more time, and you must detect this using the `handle`, and respond with 
+   `sftpStream.status(ssh2.SFTP_STATUS_CODES.EOF)`.
 
 * **LSTAT**(< _integer_ >reqID, < _string_ >path)
+ - respond with `sftpStream.attrs()`
 
 * **STAT**(< _integer_ >reqID, < _string_ >path)
+ - respond with `sftpStream.attrs()`
 
 * **REMOVE**(< _integer_ >reqID, < _string_ >path)
+ - respond with `sftpStream.status(ssh2.SFTP_STATUS_CODES.OK)` on success.
 
 * **RMDIR**(< _integer_ >reqID, < _string_ >path)
+ - respond with `sftpStream.status(ssh2.SFTP_STATUS_CODES.OK)` on success.
 
 * **REALPATH**(< _integer_ >reqID, < _string_ >path)
-
+ - respond with `sftpStream.name()`
+ 
 * **READLINK**(< _integer_ >reqID, < _string_ >path)
 
 * **SETSTAT**(< _integer_ >reqID, < _string_ >path, < _ATTRS_ >attrs)
@@ -227,7 +249,7 @@ SFTPStream methods
 
     * **longname** - _string_ - This is the `ls -l`-style format for the entry (e.g. `-rwxr--r--  1 bar   bar       718 Dec  8  2009 foo`)
 
-    * **attrs** - _ATTRS_ - This is an optional _ATTRS_ object that contains requested/available attributes for the entry.
+    * **attrs** - _ATTRS_ - This is required, and can be the empty object: `{}`. This is supposed to be an optional _ATTRS_ object that contains requested/available attributes for the entry. This bug may be fixed in the future.
 
 * **attrs**(< _integer_ >reqID, < _ATTRS_ >attrs) - _boolean_ - Sends an attrs response for the request identified by `id`. `attrs` contains the requested/available attributes.
 
