@@ -8,8 +8,8 @@ SFTPStream events
 **Server-only events**
 
 In all cases, responses to the various events **must** include the request's `reqID` as
-their first parameter. The `sftpStream` that the event fired on is the same object 
-that the various response methods should be invoked using.
+their first parameter. Responses are sent using one of the `Server-only methods` listed 
+further in this document.
 
 * **OPEN**(< _integer_ >reqID, < _string_ >filename, < _integer_ >flags, < _ATTRS_>attrs)
  - respond with `sftpStream.handle()` with your newly-opened file handle. The file handle
@@ -17,7 +17,7 @@ that the various response methods should be invoked using.
 
 * **READ**(< _integer_ >reqID, < _Buffer_ >handle, < _integer_ >offset, < _integer_ >length)
  - respond with `sftpStream.data()` with the requested data. Respond with 
-   `sftpStream.status(ssh2.SFTP_STATUS_CODES.EOF)` if there is no more data to return.
+   `sftpStream.status(SFTPStream.STATUS_CODE.EOF)` if there is no more data to return.
 
 * **WRITE**(< _integer_ >reqID, < _Buffer_ >handle, < _integer_ >offset, < _Buffer_ >data)
 
@@ -27,7 +27,7 @@ that the various response methods should be invoked using.
 * **FSETSTAT**(< _integer_ >reqID, < _Buffer_ >handle, < _ATTRS_ >attrs)
 
 * **CLOSE**(< _integer_ >reqID, < _Buffer_ >handle)
- - respond with `sftpStream.status(ssh2.SFTP_STATUS_CODES.OK)` on success.
+ - respond with `sftpStream.status(SFTPStream.STATUS_CODE.OK)` on success.
 
 * **OPENDIR**(< _integer_ >reqID, < _string_ >path)
  - respond with `sftpStream.handle()` with the directory handle. That handle
@@ -35,10 +35,10 @@ that the various response methods should be invoked using.
 
 * **READDIR**(< _integer_ >reqID, < _Buffer_ >handle)
  - the `handle` that you responded to the `OPENDIR` event with is passed to you
-   as a second parameter to identify which directory is being read. Respond with
-   `sftpStream.name()` and an array of file entries. The event will then fire 
-   one more time, and you must detect this using the `handle`, and respond with 
-   `sftpStream.status(ssh2.SFTP_STATUS_CODES.EOF)`.
+   as a second parameter to identify which directory is being read. This event 
+   may fire several times. Respond with `sftpStream.name()` and an array of file 
+   entries, or `sftpStream.status(SFTPStream.STATUS_CODE.EOF)` if there are no
+   more directory entries remaining to list.
 
 * **LSTAT**(< _integer_ >reqID, < _string_ >path)
  - respond with `sftpStream.attrs()`
@@ -47,10 +47,10 @@ that the various response methods should be invoked using.
  - respond with `sftpStream.attrs()`
 
 * **REMOVE**(< _integer_ >reqID, < _string_ >path)
- - respond with `sftpStream.status(ssh2.SFTP_STATUS_CODES.OK)` on success.
+ - respond with `sftpStream.status(SFTPStream.STATUS_CODE.OK)` on success.
 
 * **RMDIR**(< _integer_ >reqID, < _string_ >path)
- - respond with `sftpStream.status(ssh2.SFTP_STATUS_CODES.OK)` on success.
+ - respond with `sftpStream.status(SFTPStream.STATUS_CODE.OK)` on success.
 
 * **REALPATH**(< _integer_ >reqID, < _string_ >path)
  - respond with `sftpStream.name()`
