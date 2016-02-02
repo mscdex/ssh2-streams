@@ -249,7 +249,7 @@ SFTPStream methods
 
     * **longname** - _string_ - This is the `ls -l`-style format for the entry (e.g. `-rwxr--r--  1 bar   bar       718 Dec  8  2009 foo`)
 
-    * **attrs** - _ATTRS_ - This is required, and can be the empty object: `{}`. This is supposed to be an optional _ATTRS_ object that contains requested/available attributes for the entry. This bug may be fixed in the future.
+    * **attrs** - _ATTRS_ - This is optional, and can be the empty object: `{}`. This contains requested/available attributes for the entry. In previous versions of the library, it was required to at least be the empty object `{}`.
 
 * **attrs**(< _integer_ >reqID, < _ATTRS_ >attrs) - _boolean_ - Sends an attrs response for the request identified by `id`. `attrs` contains the requested/available attributes.
 
