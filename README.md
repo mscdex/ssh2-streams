@@ -322,9 +322,7 @@ SSH2Stream methods
 
     * **server** - _boolean_ - Set to `true` to create an instance in server mode. **Default:** `false`
 
-    * **privateKey** - _mixed_ - If in server mode, a _Buffer_ or _string_ that contains the **required** host private key (OpenSSH format). **Default:** (none)
-
-    * **passphrase** - _string_ - For an encrypted host private key, this is the passphrase used to decrypt it. **Default:** (none)
+    * **hostKeys** - _object_ - If in server mode, an object keyed on host key format (see supported `serverHostKey` values in `algorithms` option below) with values being (decrypted) _Buffer_s or _string_s that contain PEM-encoded (OpenSSH format) host private key(s). **Default:** (none)
 
     * **banner** - _string_ - If in server mode, an optional message to send to the user immediately upon connection, before the handshake. **Default:** (none)
 
@@ -387,17 +385,21 @@ SSH2Stream methods
                 * cast128-cbc
                 * arcfour
 
-        * **serverHostKey** - _array_ - Server host key formats.
+        * **serverHostKey** - _array_ - Server host key formats. In server mode, this list must agree with the host private keys set in the `hostKeys` config setting.
 
             * Default values:
 
                 1. ssh-rsa
                 2. ecdsa-sha2-nistp256 **(node v0.11.14 or newer)**
+                3. ecdsa-sha2-nistp384 **(node v0.11.14 or newer)**
+                4. ecdsa-sha2-nistp521 **(node v0.11.14 or newer)**
 
             * Supported values:
 
                 * ssh-rsa
                 * ecdsa-sha2-nistp256 **(node v0.11.14 or newer)**
+                * ecdsa-sha2-nistp384 **(node v0.11.14 or newer)**
+                * ecdsa-sha2-nistp521 **(node v0.11.14 or newer)**
                 * ssh-dss
 
         * **hmac** - _array_ - (H)MAC algorithms.
