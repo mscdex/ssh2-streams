@@ -24,6 +24,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-rsa',
       type: 'rsa',
+      curve: undefined,
       extra: undefined,
       comment: undefined,
       encryption: undefined,
@@ -152,6 +153,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-rsa',
       type: 'rsa',
+      curve: undefined,
       extra: undefined,
       comment: undefined,
       encryption: undefined,
@@ -279,8 +281,9 @@ var group = path.basename(__filename, '.js') + '/';
       '-----END RSA PRIVATE KEY-----'
     ].join('\n'),
     expected: {
-      fulltype: 'ssh-rsa',
+      fulltype: undefined,
       type: 'rsa',
+      curve: undefined,
       extra: [ 'E9F7397F94E585BCE4C739D5C5226A2D' ],
       comment: undefined,
       encryption: 'aes-128-cbc',
@@ -401,6 +404,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-rsa',
       type: 'rsa',
+      curve: undefined,
       extra: undefined,
       comment: undefined,
       encryption: undefined,
@@ -441,6 +445,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-rsa',
       type: 'rsa',
+      curve: undefined,
       extra: undefined,
       comment: 'testing-ssh2-from-node.js',
       encryption: undefined,
@@ -497,6 +502,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-dss',
       type: 'dss',
+      curve: undefined,
       extra: undefined,
       comment: undefined,
       encryption: undefined,
@@ -621,8 +627,9 @@ var group = path.basename(__filename, '.js') + '/';
       '-----END DSA PRIVATE KEY-----'
     ].join('\n'),
     expected: {
-      fulltype: 'ssh-dss',
+      fulltype: undefined,
       type: 'dss',
+      curve: undefined,
       extra: [ 'D6218FEC397F57918B06DC3F9EC33487' ],
       comment: undefined,
       encryption: 'aes-128-cbc',
@@ -740,6 +747,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-dss',
       type: 'dss',
+      curve: undefined,
       extra: undefined,
       comment: undefined,
       encryption: undefined,
@@ -842,6 +850,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-dss',
       type: 'dss',
+      curve: undefined,
       extra: undefined,
       comment: 'testing ssh2 from node.js',
       encryption: undefined,
@@ -947,6 +956,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-dss',
       type: 'dss',
+      curve: undefined,
       extra: undefined,
       comment: 'ssh2test',
       encryption: undefined,
@@ -1057,6 +1067,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-rsa',
       type: 'rsa',
+      curve: undefined,
       extra: undefined,
       comment: 'testing ssh2 from node.js',
       encryption: undefined,
@@ -1111,6 +1122,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-rsa',
       type: 'rsa',
+      curve: undefined,
       extra: undefined,
       comment: 'testing ssh2 from node.js',
       encryption: undefined,
@@ -1166,6 +1178,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-rsa',
       type: 'rsa',
+      curve: undefined,
       extra: undefined,
       comment: 'testing ssh2 from node.js',
       encryption: undefined,
@@ -1221,6 +1234,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-rsa',
       type: 'rsa',
+      curve: undefined,
       extra: undefined,
       comment: 'testing ssh2 from node.js',
       encryption: undefined,
@@ -1275,6 +1289,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-rsa',
       type: 'rsa',
+      curve: undefined,
       extra: undefined,
       comment: '',
       encryption: undefined,
@@ -1327,6 +1342,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-rsa',
       type: 'rsa',
+      curve: undefined,
       extra: undefined,
       comment: '',
       encryption: undefined,
@@ -1378,6 +1394,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-rsa',
       type: 'rsa',
+      curve: undefined,
       extra: undefined,
       comment: undefined,
       encryption: undefined,
@@ -1430,6 +1447,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-rsa',
       type: 'rsa',
+      curve: undefined,
       extra: undefined,
       comment: undefined,
       encryption: undefined,
@@ -1486,6 +1504,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-dss',
       type: 'dss',
+      curve: undefined,
       extra: undefined,
       comment: undefined,
       encryption: undefined,
@@ -1612,6 +1631,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-rsa',
       type: 'rsa',
+      curve: undefined,
       extra: undefined,
       comment: 'rsa-key-20141119',
       encryption: undefined,
@@ -1814,6 +1834,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-rsa',
       type: 'rsa',
+      curve: undefined,
       extra: undefined,
       comment: 'rsa-key-20141119',
       encryption: 'aes256-cbc',
@@ -1917,6 +1938,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-dss',
       type: 'dss',
+      curve: undefined,
       extra: undefined,
       comment: 'dsa-key-20141202',
       encryption: undefined,
@@ -2143,6 +2165,7 @@ var group = path.basename(__filename, '.js') + '/';
     expected: {
       fulltype: 'ssh-dss',
       type: 'dss',
+      curve: undefined,
       extra: undefined,
       comment: 'dsa-key-20141202',
       encryption: 'aes256-cbc',

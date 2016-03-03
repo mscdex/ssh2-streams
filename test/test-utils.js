@@ -303,6 +303,7 @@ var tests = [
           res,
           { type: 'dss',
             fulltype: 'ssh-dss',
+            curve: undefined,
             public: new Buffer([
               0x00, 0x00, 0x00, 0x07, 0x73, 0x73, 0x68, 0x2d, 0x64, 0x73, 0x73,
               0x00, 0x00, 0x01, 0x01, 0x00, 0x9d, 0x06, 0xb6, 0x1f, 0x49, 0x1f,
@@ -505,7 +506,9 @@ function next() {
     return;
 
   var v = tests[t];
-  v.run.call(v);
+  process.nextTick(function() {
+    v.run.call(v);
+  });
 }
 
 function makeMsg(what, msg) {

@@ -15,7 +15,7 @@ var fixturesdir = path.join(__dirname, 'fixtures');
 var HOST_KEY_RSA = fs.readFileSync(path.join(fixturesdir, 'ssh_host_rsa_key'));
 var SERVER_CONFIG = {
   server: true,
-  privateKey: HOST_KEY_RSA
+  hostKeys: { 'ssh-rsa': HOST_KEY_RSA }
 };
 
 function SimpleStream() {

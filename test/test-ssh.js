@@ -1,4 +1,6 @@
 var SSH2Stream = require('../lib/ssh');
+var utils = require('../lib/utils');
+var parseKey = utils.parseKey;
 
 var basename = require('path').basename;
 var inspect = require('util').inspect;
@@ -13,7 +15,10 @@ var SERVER_KEY = require('fs').readFileSync(__dirname
 var tests = [
   // server-side tests
   { run: function() {
-      var stream = new SSH2Stream({ server: true, privateKey: SERVER_KEY });
+      var stream = new SSH2Stream({
+        server: true,
+        hostKeys: { 'ssh-rsa': parseKey(SERVER_KEY) }
+      });
       var result;
       var expected;
 
