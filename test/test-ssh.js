@@ -1,26 +1,26 @@
 var SSH2Stream = require('../lib/ssh');
 
-var basename = require('path').basename,
-    inspect = require('util').inspect,
-    assert = require('assert');
+var basename = require('path').basename;
+var inspect = require('util').inspect;
+var assert = require('assert');
 
-var group = basename(__filename, '.js') + '/',
-    t = -1,
-    EMPTY_BUFFER = new Buffer(0),
-    SERVER_KEY = require('fs').readFileSync(__dirname
+var group = basename(__filename, '.js') + '/';
+var t = -1;
+var EMPTY_BUFFER = new Buffer(0);
+var SERVER_KEY = require('fs').readFileSync(__dirname
                                             + '/fixtures/ssh_host_rsa_key');
 
 var tests = [
   // server-side tests
   { run: function() {
-      var self = this,
-          what = this.what,
-          stream = new SSH2Stream({ server: true, privateKey: SERVER_KEY }),
-          result,
-          expected;
+      var self = this;
+      var what = this.what;
+      var stream = new SSH2Stream({ server: true, privateKey: SERVER_KEY });
+      var result;
+      var expected;
 
-      var key = new Buffer('o hai mark'),
-          keyLen = key.length;
+      var key = new Buffer('o hai mark');
+      var keyLen = key.length;
       expected = new Buffer([
         0x3C,
         0x00, 0x00, 0x00, 0x07,
