@@ -1,8 +1,8 @@
 var parser = require('../lib/keyParser');
 
-var path = require('path'),
-    assert = require('assert'),
-    inspect = require('util').inspect;
+var path = require('path');
+var assert = require('assert');
+var inspect = require('util').inspect;
 
 var group = path.basename(__filename, '.js') + '/';
 
@@ -22,7 +22,7 @@ var group = path.basename(__filename, '.js') + '/';
       '-----END RSA PRIVATE KEY-----'
     ].join('\n'),
     expected: {
-      fulltype: undefined,
+      fulltype: 'ssh-rsa',
       type: 'rsa',
       extra: undefined,
       comment: undefined,
@@ -150,7 +150,7 @@ var group = path.basename(__filename, '.js') + '/';
       ' '
     ].join('\n'),
     expected: {
-      fulltype: undefined,
+      fulltype: 'ssh-rsa',
       type: 'rsa',
       extra: undefined,
       comment: undefined,
@@ -279,7 +279,7 @@ var group = path.basename(__filename, '.js') + '/';
       '-----END RSA PRIVATE KEY-----'
     ].join('\n'),
     expected: {
-      fulltype: undefined,
+      fulltype: 'ssh-rsa',
       type: 'rsa',
       extra: [ 'E9F7397F94E585BCE4C739D5C5226A2D' ],
       comment: undefined,
@@ -495,7 +495,7 @@ var group = path.basename(__filename, '.js') + '/';
       '-----END DSA PRIVATE KEY-----'
     ].join('\n'),
     expected: {
-      fulltype: undefined,
+      fulltype: 'ssh-dss',
       type: 'dss',
       extra: undefined,
       comment: undefined,
@@ -621,7 +621,7 @@ var group = path.basename(__filename, '.js') + '/';
       '-----END DSA PRIVATE KEY-----'
     ].join('\n'),
     expected: {
-      fulltype: undefined,
+      fulltype: 'ssh-dss',
       type: 'dss',
       extra: [ 'D6218FEC397F57918B06DC3F9EC33487' ],
       comment: undefined,

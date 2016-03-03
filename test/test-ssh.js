@@ -13,21 +13,22 @@ var SERVER_KEY = require('fs').readFileSync(__dirname
 var tests = [
   // server-side tests
   { run: function() {
-      var self = this;
-      var what = this.what;
       var stream = new SSH2Stream({ server: true, privateKey: SERVER_KEY });
       var result;
       var expected;
 
       var key = new Buffer('o hai mark');
       var keyLen = key.length;
-      expected = new Buffer([
-        0x3C,
-        0x00, 0x00, 0x00, 0x07,
-        0x73, 0x73, 0x68, 0x2D, 0x72, 0x73, 0x61,
-        (keyLen >>> 24) & 0xFF, (keyLen >>> 16) & 0xFF, (keyLen >>> 8) & 0xFF,
-          keyLen & 0xFF
-      ].concat(b2a(key)));
+      expected = Buffer.concat([
+        new Buffer([
+          0x3C,
+          0x00, 0x00, 0x00, 0x07,
+          0x73, 0x73, 0x68, 0x2D, 0x72, 0x73, 0x61,
+          (keyLen >>> 24) & 0xFF, (keyLen >>> 16) & 0xFF, (keyLen >>> 8) & 0xFF,
+            keyLen & 0xFF
+        ]),
+        key
+      ]);
 
       skipIdent(stream);
       stream.authPKOK('ssh-rsa', key);
@@ -70,10 +71,6 @@ function readData(stream) {
     i += (len - 1);
   }
   return newbuf;
-}
-
-function b2a(buffer) {
-  return Array.prototype.slice.call(buffer);
 }
 
 function assertDeepEqual(actual, expected, msg) {

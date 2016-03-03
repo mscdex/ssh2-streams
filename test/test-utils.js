@@ -1,18 +1,17 @@
 var utils = require('../lib/utils');
 
-var fs = require('fs'),
-    path = require('path'),
-    inspect = require('util').inspect,
-    assert = require('assert');
+var fs = require('fs');
+var path = require('path');
+var assert = require('assert');
 
-var t = -1,
-    group = path.basename(__filename, '.js') + '/',
-    fixturesdir = path.join(__dirname, 'fixtures');
+var t = -1;
+var group = path.basename(__filename, '.js') + '/';
+var fixturesdir = path.join(__dirname, 'fixtures');
 
 var tests = [
   { run: function() {
-      var what = this.what,
-          r;
+      var what = this.what;
+      var r;
 
       assert.strictEqual(r = utils.readInt(new Buffer([0,0,0]), 0),
                          false,
@@ -22,8 +21,8 @@ var tests = [
     what: 'readInt - without stream callback - failure #1'
   },
   { run: function() {
-      var what = this.what,
-          r;
+      var what = this.what;
+      var r;
 
       assert.strictEqual(r = utils.readInt(new Buffer([]), 0),
                          false,
@@ -33,8 +32,8 @@ var tests = [
     what: 'readInt - without stream callback - failure #2'
   },
   { run: function() {
-      var what = this.what,
-          r;
+      var what = this.what;
+      var r;
 
       assert.strictEqual(r = utils.readInt(new Buffer([0,0,0,5]), 0),
                          5,
@@ -44,16 +43,16 @@ var tests = [
     what: 'readInt - without stream callback - success'
   },
   { run: function() {
-      var what = this.what,
-          callback = function() {},
-          stream = {
-            _cleanup: function(cb) {
-              cleanupCalled = true;
-              assert(cb === callback, makeMsg(what, 'Wrong callback'))
-            }
-          },
-          cleanupCalled = false,
-          r;
+      var what = this.what;
+      var callback = function() {};
+      var stream = {
+        _cleanup: function(cb) {
+          cleanupCalled = true;
+          assert(cb === callback, makeMsg(what, 'Wrong callback'));
+        }
+      };
+      var cleanupCalled = false;
+      var r;
 
       assert.strictEqual(r = utils.readInt(new Buffer([]), 0, stream, callback),
                          false,
@@ -64,8 +63,8 @@ var tests = [
     what: 'readInt - with stream callback'
   },
   { run: function() {
-      var what = this.what,
-          r;
+      var what = this.what;
+      var r;
 
       assert.strictEqual(r = utils.readString(new Buffer([0,0,0]), 0),
                          false,
@@ -75,8 +74,8 @@ var tests = [
     what: 'readString - without stream callback - bad length #1'
   },
   { run: function() {
-      var what = this.what,
-          r;
+      var what = this.what;
+      var r;
 
       assert.strictEqual(r = utils.readString(new Buffer([]), 0),
                          false,
@@ -86,8 +85,8 @@ var tests = [
     what: 'readString - without stream callback - bad length #2'
   },
   { run: function() {
-      var what = this.what,
-          r;
+      var what = this.what;
+      var r;
 
       assert.deepEqual(r = utils.readString(new Buffer([0,0,0,1,5]), 0),
                        new Buffer([5]),
@@ -97,8 +96,8 @@ var tests = [
     what: 'readString - without stream callback - success'
   },
   { run: function() {
-      var what = this.what,
-          r;
+      var what = this.what;
+      var r;
 
       assert.deepEqual(r = utils.readString(new Buffer([0,0,0,1,33]), 0, 'ascii'),
                        '!',
@@ -108,16 +107,16 @@ var tests = [
     what: 'readString - without stream callback - encoding'
   },
   { run: function() {
-      var what = this.what,
-          callback = function() {},
-          stream = {
-            _cleanup: function(cb) {
-              cleanupCalled = true;
-              assert(cb === callback, makeMsg(what, 'Wrong callback'))
-            }
-          },
-          cleanupCalled = false,
-          r;
+      var what = this.what;
+      var callback = function() {};
+      var stream = {
+        _cleanup: function(cb) {
+          cleanupCalled = true;
+          assert(cb === callback, makeMsg(what, 'Wrong callback'));
+        }
+      };
+      var cleanupCalled = false;
+      var r;
 
       assert.deepEqual(r = utils.readString(new Buffer([0,0,0,1]),
                                             0,
@@ -131,16 +130,16 @@ var tests = [
     what: 'readString - with stream callback - no encoding'
   },
   { run: function() {
-      var what = this.what,
-          callback = function() {},
-          stream = {
-            _cleanup: function(cb) {
-              cleanupCalled = true;
-              assert(cb === callback, makeMsg(what, 'Wrong callback'))
-            }
-          },
-          cleanupCalled = false,
-          r;
+      var what = this.what;
+      var callback = function() {};
+      var stream = {
+        _cleanup: function(cb) {
+          cleanupCalled = true;
+          assert(cb === callback, makeMsg(what, 'Wrong callback'));
+        }
+      };
+      var cleanupCalled = false;
+      var r;
 
       assert.deepEqual(r = utils.readString(new Buffer([0,0,0,1]),
                                             0,
@@ -155,10 +154,10 @@ var tests = [
     what: 'readString - with stream callback - encoding'
   },
   { run: function() {
-      var what = this.what,
-          filepath = fixturesdir + '/encrypted-rsa.ppk',
-          passphrase = 'node.js',
-          keyInfo = utils.parseKey(fs.readFileSync(filepath));
+      var what = this.what;
+      var filepath = fixturesdir + '/encrypted-rsa.ppk';
+      var passphrase = 'node.js';
+      var keyInfo = utils.parseKey(fs.readFileSync(filepath));
 
       utils.decryptKey(keyInfo, passphrase);
 
@@ -220,10 +219,10 @@ var tests = [
     what: 'decryptKey - with encrypted RSA PPK'
   },
   { run: function() {
-      var what = this.what,
-          filepath = fixturesdir + '/encrypted-dsa.ppk',
-          passphrase = 'node.js',
-          keyInfo = utils.parseKey(fs.readFileSync(filepath));
+      var what = this.what;
+      var filepath = fixturesdir + '/encrypted-dsa.ppk';
+      var passphrase = 'node.js';
+      var keyInfo = utils.parseKey(fs.readFileSync(filepath));
 
       utils.decryptKey(keyInfo, passphrase);
 
@@ -232,8 +231,8 @@ var tests = [
         69,89,45,45,45,45,45,10,77,73,73,66,117,103,73,66,65,65,75,66,103,81,67,
         90,57,105,80,71,72,110,48,97,78,119,98,66,72,111,112,48,76,102,67,107,
         79,72,66,77,103,75,119,76,79,50,80,49,117,57,57,54,69,85,109,68,105,77,
-        49,104,100,83,98,116,10,100,117,77,114,67,113,53,111,78,113,74,76,47,116
-        ,79,81,109,72,73,49,100,50,75,101,65,77,48,72,113,74,109,65,74,89,74,103,
+        49,104,100,83,98,116,10,100,117,77,114,67,113,53,111,78,113,74,76,47,116,
+        79,81,109,72,73,49,100,50,75,101,65,77,48,72,113,74,109,65,74,89,74,103,
         102,43,56,81,104,74,49,109,104,74,56,81,115,65,77,90,113,54,121,84,74,
         106,54,53,77,68,89,120,10,122,105,73,117,56,106,79,85,68,104,80,100,67,
         68,80,48,80,105,67,81,79,66,68,119,88,48,109,47,108,54,47,72,50,73,97,54,
@@ -275,7 +274,6 @@ var tests = [
     what: 'decryptKey - with encrypted DSA PPK'
   },
   { run: function() {
-      var what = this.what;
       var pubkey = [
         '---- BEGIN SSH2 PUBLIC KEY ----',
         'Comment: "dsa-key-20151028"',
@@ -490,7 +488,6 @@ var tests = [
               0x53, 0x31, 0x63, 0x67, 0x44, 0x6e, 0x51, 0x3d, 0x0a, 0x2d, 0x2d,
               0x2d, 0x2d, 0x2d, 0x45, 0x4e, 0x44, 0x20, 0x50, 0x55, 0x42, 0x4c,
               0x49, 0x43, 0x20, 0x4b, 0x45, 0x59, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d
-
             ])
           }
         );

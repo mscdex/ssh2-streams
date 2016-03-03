@@ -1,29 +1,28 @@
-var SFTPStream = require('../lib/sftp'),
-    Stats = SFTPStream.Stats,
-    STATUS_CODE = SFTPStream.STATUS_CODE,
-    OPEN_MODE = SFTPStream.OPEN_MODE;
+var SFTPStream = require('../lib/sftp');
+var Stats = SFTPStream.Stats;
+var STATUS_CODE = SFTPStream.STATUS_CODE;
+var OPEN_MODE = SFTPStream.OPEN_MODE;
 
-var constants = require('constants'),
-    basename = require('path').basename,
-    inspect = require('util').inspect,
-    assert = require('assert');
+var constants = require('constants');
+var basename = require('path').basename;
+var assert = require('assert');
 
-var group = basename(__filename, '.js') + '/',
-    t = -1;
+var group = basename(__filename, '.js') + '/';
+var t = -1;
 
 var tests = [
 // successful client requests
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
-        var path_ = '/tmp/foo.txt',
-            handle_ = new Buffer('node.js');
+        var path_ = '/tmp/foo.txt';
+        var handle_ = new Buffer('node.js');
         server.on('OPEN', function(id, path, pflags, attrs) {
           assert(++self.state.requests === 1,
                  makeMsg(what, 'Saw too many requests'));
@@ -47,10 +46,10 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
         var handle_ = new Buffer('node.js');
@@ -74,15 +73,15 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
-        var handle_ = new Buffer('node.js'),
-            expected = new Buffer('node.jsnode.jsnode.jsnode.jsnode.jsnode.js'),
-            buffer = new Buffer(expected.length);
+        var handle_ = new Buffer('node.js');
+        var expected = new Buffer('node.jsnode.jsnode.jsnode.jsnode.jsnode.js');
+        var buffer = new Buffer(expected.length);
         buffer.fill(0);
         server.on('READ', function(id, handle, offset, len) {
           assert(++self.state.requests <= 2,
@@ -110,14 +109,14 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
-        var handle_ = new Buffer('node.js'),
-            buf = new Buffer('node.jsnode.jsnode.jsnode.jsnode.jsnode.js');
+        var handle_ = new Buffer('node.js');
+        var buf = new Buffer('node.jsnode.jsnode.jsnode.jsnode.jsnode.js');
         server.on('WRITE', function(id, handle, offset, data) {
           assert(++self.state.requests === 1,
                  makeMsg(what, 'Saw too many requests'));
@@ -140,20 +139,20 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
-        var path_ = '/foo/bar/baz',
-            attrs_ = new Stats({
-              size: 10 * 1024,
-              uid: 9001,
-              gid: 9001,
-              atime: (Date.now() / 1000) | 0,
-              mtime: (Date.now() / 1000) | 0
-            });
+        var path_ = '/foo/bar/baz';
+        var attrs_ = new Stats({
+          size: 10 * 1024,
+          uid: 9001,
+          gid: 9001,
+          atime: (Date.now() / 1000) | 0,
+          mtime: (Date.now() / 1000) | 0
+        });
         server.on('LSTAT', function(id, path) {
           assert(++self.state.requests === 1,
                  makeMsg(what, 'Saw too many requests'));
@@ -175,20 +174,20 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
-        var handle_ = new Buffer('node.js'),
-            attrs_ = new Stats({
-              size: 10 * 1024,
-              uid: 9001,
-              gid: 9001,
-              atime: (Date.now() / 1000) | 0,
-              mtime: (Date.now() / 1000) | 0
-            });
+        var handle_ = new Buffer('node.js');
+        var attrs_ = new Stats({
+          size: 10 * 1024,
+          uid: 9001,
+          gid: 9001,
+          atime: (Date.now() / 1000) | 0,
+          mtime: (Date.now() / 1000) | 0
+        });
         server.on('FSTAT', function(id, handle) {
           assert(++self.state.requests === 1,
                  makeMsg(what, 'Saw too many requests'));
@@ -210,19 +209,19 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
-        var path_ = '/foo/bar/baz',
-            attrs_ = new Stats({
-              uid: 9001,
-              gid: 9001,
-              atime: (Date.now() / 1000) | 0,
-              mtime: (Date.now() / 1000) | 0
-            });
+        var path_ = '/foo/bar/baz';
+        var attrs_ = new Stats({
+          uid: 9001,
+          gid: 9001,
+          atime: (Date.now() / 1000) | 0,
+          mtime: (Date.now() / 1000) | 0
+        });
         server.on('SETSTAT', function(id, path, attrs) {
           assert(++self.state.requests === 1,
                  makeMsg(what, 'Saw too many requests'));
@@ -244,19 +243,19 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
-        var handle_ = new Buffer('node.js'),
-            attrs_ = new Stats({
-              uid: 9001,
-              gid: 9001,
-              atime: (Date.now() / 1000) | 0,
-              mtime: (Date.now() / 1000) | 0
-            });
+        var handle_ = new Buffer('node.js');
+        var attrs_ = new Stats({
+          uid: 9001,
+          gid: 9001,
+          atime: (Date.now() / 1000) | 0,
+          mtime: (Date.now() / 1000) | 0
+        });
         server.on('FSETSTAT', function(id, handle, attrs) {
           assert(++self.state.requests === 1,
                  makeMsg(what, 'Saw too many requests'));
@@ -278,14 +277,14 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
-        var handle_ = new Buffer('node.js'),
-            path_ = '/tmp';
+        var handle_ = new Buffer('node.js');
+        var path_ = '/tmp';
         server.on('OPENDIR', function(id, path) {
           assert(++self.state.requests === 1,
                  makeMsg(what, 'Saw too many requests'));
@@ -307,59 +306,59 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
-        var handle_ = new Buffer('node.js'),
-            list_ = [
-              { filename: '.',
-                longname: 'drwxr-xr-x  56 nodejs   nodejs      4096 Nov 10 01:05 .',
-                attrs: new Stats({
-                  mode: 0755 | constants.S_IFDIR,
-                  size: 4096,
-                  uid: 9001,
-                  gid: 8001,
-                  atime: 1415599549,
-                  mtime: 1415599590
-                })
-              },
-              { filename: '..',
-                longname: 'drwxr-xr-x   4 root     root        4096 May 16  2013 ..',
-                attrs: new Stats({
-                  mode: 0755 | constants.S_IFDIR,
-                  size: 4096,
-                  uid: 0,
-                  gid: 0,
-                  atime: 1368729954,
-                  mtime: 1368729999
-                })
-              },
-              { filename: 'foo',
-                longname: 'drwxrwxrwx   2 nodejs   nodejs      4096 Mar  8  2009 foo',
-                attrs: new Stats({
-                  mode: 0777 | constants.S_IFDIR,
-                  size: 4096,
-                  uid: 9001,
-                  gid: 8001,
-                  atime: 1368729954,
-                  mtime: 1368729999
-                })
-              },
-              { filename: 'bar',
-                longname: '-rw-r--r--   1 nodejs   nodejs 513901992 Dec  4  2009 bar',
-                attrs: new Stats({
-                  mode: 0644 | constants.S_IFREG,
-                  size: 513901992,
-                  uid: 9001,
-                  gid: 8001,
-                  atime: 1259972199,
-                  mtime: 1259972199
-                })
-              }
-            ];
+        var handle_ = new Buffer('node.js');
+        var list_ = [
+          { filename: '.',
+            longname: 'drwxr-xr-x  56 nodejs   nodejs      4096 Nov 10 01:05 .',
+            attrs: new Stats({
+              mode: 0755 | constants.S_IFDIR,
+              size: 4096,
+              uid: 9001,
+              gid: 8001,
+              atime: 1415599549,
+              mtime: 1415599590
+            })
+          },
+          { filename: '..',
+            longname: 'drwxr-xr-x   4 root     root        4096 May 16  2013 ..',
+            attrs: new Stats({
+              mode: 0755 | constants.S_IFDIR,
+              size: 4096,
+              uid: 0,
+              gid: 0,
+              atime: 1368729954,
+              mtime: 1368729999
+            })
+          },
+          { filename: 'foo',
+            longname: 'drwxrwxrwx   2 nodejs   nodejs      4096 Mar  8  2009 foo',
+            attrs: new Stats({
+              mode: 0777 | constants.S_IFDIR,
+              size: 4096,
+              uid: 9001,
+              gid: 8001,
+              atime: 1368729954,
+              mtime: 1368729999
+            })
+          },
+          { filename: 'bar',
+            longname: '-rw-r--r--   1 nodejs   nodejs 513901992 Dec  4  2009 bar',
+            attrs: new Stats({
+              mode: 0644 | constants.S_IFREG,
+              size: 513901992,
+              uid: 9001,
+              gid: 8001,
+              atime: 1259972199,
+              mtime: 1259972199
+            })
+          }
+        ];
         server.on('READDIR', function(id, handle) {
           assert(++self.state.requests === 1,
                  makeMsg(what, 'Saw too many requests'));
@@ -383,59 +382,59 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
-        var handle_ = new Buffer('node.js'),
-            list_ = [
-              { filename: '.',
-                longname: 'drwxr-xr-x  56 nodejs   nodejs      4096 Nov 10 01:05 .',
-                attrs: new Stats({
-                  mode: 0755 | constants.S_IFDIR,
-                  size: 4096,
-                  uid: 9001,
-                  gid: 8001,
-                  atime: 1415599549,
-                  mtime: 1415599590
-                })
-              },
-              { filename: '..',
-                longname: 'drwxr-xr-x   4 root     root        4096 May 16  2013 ..',
-                attrs: new Stats({
-                  mode: 0755 | constants.S_IFDIR,
-                  size: 4096,
-                  uid: 0,
-                  gid: 0,
-                  atime: 1368729954,
-                  mtime: 1368729999
-                })
-              },
-              { filename: 'foo',
-                longname: 'drwxrwxrwx   2 nodejs   nodejs      4096 Mar  8  2009 foo',
-                attrs: new Stats({
-                  mode: 0777 | constants.S_IFDIR,
-                  size: 4096,
-                  uid: 9001,
-                  gid: 8001,
-                  atime: 1368729954,
-                  mtime: 1368729999
-                })
-              },
-              { filename: 'bar',
-                longname: '-rw-r--r--   1 nodejs   nodejs 513901992 Dec  4  2009 bar',
-                attrs: new Stats({
-                  mode: 0644 | constants.S_IFREG,
-                  size: 513901992,
-                  uid: 9001,
-                  gid: 8001,
-                  atime: 1259972199,
-                  mtime: 1259972199
-                })
-              }
-            ];
+        var handle_ = new Buffer('node.js');
+        var list_ = [
+          { filename: '.',
+            longname: 'drwxr-xr-x  56 nodejs   nodejs      4096 Nov 10 01:05 .',
+            attrs: new Stats({
+              mode: 0755 | constants.S_IFDIR,
+              size: 4096,
+              uid: 9001,
+              gid: 8001,
+              atime: 1415599549,
+              mtime: 1415599590
+            })
+          },
+          { filename: '..',
+            longname: 'drwxr-xr-x   4 root     root        4096 May 16  2013 ..',
+            attrs: new Stats({
+              mode: 0755 | constants.S_IFDIR,
+              size: 4096,
+              uid: 0,
+              gid: 0,
+              atime: 1368729954,
+              mtime: 1368729999
+            })
+          },
+          { filename: 'foo',
+            longname: 'drwxrwxrwx   2 nodejs   nodejs      4096 Mar  8  2009 foo',
+            attrs: new Stats({
+              mode: 0777 | constants.S_IFDIR,
+              size: 4096,
+              uid: 9001,
+              gid: 8001,
+              atime: 1368729954,
+              mtime: 1368729999
+            })
+          },
+          { filename: 'bar',
+            longname: '-rw-r--r--   1 nodejs   nodejs 513901992 Dec  4  2009 bar',
+            attrs: new Stats({
+              mode: 0644 | constants.S_IFREG,
+              size: 513901992,
+              uid: 9001,
+              gid: 8001,
+              atime: 1259972199,
+              mtime: 1259972199
+            })
+          }
+        ];
         server.on('READDIR', function(id, handle) {
           assert(++self.state.requests === 1,
                  makeMsg(what, 'Saw too many requests'));
@@ -457,10 +456,10 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
         var path_ = '/foo/bar/baz';
@@ -484,10 +483,10 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
         var path_ = '/foo/bar/baz';
@@ -511,10 +510,10 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
         var path_ = '/foo/bar/baz';
@@ -538,14 +537,14 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
-        var path_ = '/foo/bar/baz',
-            name_ = { filename: '/tmp/foo' };
+        var path_ = '/foo/bar/baz';
+        var name_ = { filename: '/tmp/foo' };
         server.on('REALPATH', function(id, path) {
           assert(++self.state.requests === 1,
                  makeMsg(what, 'Saw too many requests'));
@@ -567,20 +566,20 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
-        var path_ = '/foo/bar/baz',
-            attrs_ = new Stats({
-              size: 10 * 1024,
-              uid: 9001,
-              gid: 9001,
-              atime: (Date.now() / 1000) | 0,
-              mtime: (Date.now() / 1000) | 0
-            });
+        var path_ = '/foo/bar/baz';
+        var attrs_ = new Stats({
+          size: 10 * 1024,
+          uid: 9001,
+          gid: 9001,
+          atime: (Date.now() / 1000) | 0,
+          mtime: (Date.now() / 1000) | 0
+        });
         server.on('STAT', function(id, path) {
           assert(++self.state.requests === 1,
                  makeMsg(what, 'Saw too many requests'));
@@ -602,14 +601,14 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
-        var oldPath_ = '/foo/bar/baz',
-            newPath_ = '/tmp/foo';
+        var oldPath_ = '/foo/bar/baz';
+        var newPath_ = '/tmp/foo';
         server.on('RENAME', function(id, oldPath, newPath) {
           assert(++self.state.requests === 1,
                  makeMsg(what, 'Saw too many requests'));
@@ -633,14 +632,14 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
-        var linkPath_ = '/foo/bar/baz',
-            name = { filename: '/tmp/foo' };
+        var linkPath_ = '/foo/bar/baz';
+        var name = { filename: '/tmp/foo' };
         server.on('READLINK', function(id, linkPath) {
           assert(++self.state.requests === 1,
                  makeMsg(what, 'Saw too many requests'));
@@ -664,14 +663,14 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
-        var linkPath_ = '/foo/bar/baz',
-            targetPath_ = '/tmp/foo';
+        var linkPath_ = '/foo/bar/baz';
+        var targetPath_ = '/tmp/foo';
         server.on('SYMLINK', function(id, linkPath, targetPath) {
           assert(++self.state.requests === 1,
                  makeMsg(what, 'Saw too many requests'));
@@ -695,18 +694,18 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
-        var opens = 0,
-            reads = 0,
-            closes = 0,
-            path_ = '/foo/bar/baz',
-            handle_ = new Buffer('hi mom!'),
-            data_ = new Buffer('hello world');
+        var opens = 0;
+        var reads = 0;
+        var closes = 0;
+        var path_ = '/foo/bar/baz';
+        var handle_ = new Buffer('hi mom!');
+        var data_ = new Buffer('hello world');
         server.on('OPEN', function(id, path, pflags, attrs) {
           assert(++opens === 1, makeMsg(what, 'Saw too many OPENs'));
           assert(id === 0, makeMsg(what, 'Wrong request id: ' + id));
@@ -750,15 +749,15 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
-        var opens = 0,
-            path_ = '/foo/bar/baz',
-            error;
+        var opens = 0;
+        var path_ = '/foo/bar/baz';
+        var error;
         server.on('OPEN', function(id, path, pflags, attrs) {
           ++opens;
           ++self.state.requests;
@@ -769,7 +768,6 @@ var tests = [
           server.status(id, STATUS_CODE.NO_SUCH_FILE);
           server.end();
         });
-        var buf = [];
         client.createReadStream(path_).on('error', function(err) {
           error = err;
         }).on('close', function() {
@@ -787,10 +785,10 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
         var handle_ = new Buffer('node.js');
@@ -815,15 +813,15 @@ var tests = [
   { run: function() {
       setup(this);
 
-      var self = this,
-          what = this.what,
-          client = this.client,
-          server = this.server;
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
 
       this.onReady = function() {
-        var path_ = '/tmp/foo.txt',
-            reqs = 0,
-            continues = 0;
+        var path_ = '/tmp/foo.txt';
+        var reqs = 0;
+        var continues = 0;
 
         client.unpipe(server);
 
@@ -858,13 +856,14 @@ var tests = [
 ];
 
 function setup(self) {
-  var expectedRequests = (self.expected && self.expected.requests) || 1,
-      expectedResponses = (self.expected && self.expected.responses) || 1,
-      clientEnds = 0,
-      serverEnds = 0;
+  var expectedRequests = (self.expected && self.expected.requests) || 1;
+  var expectedResponses = (self.expected && self.expected.responses) || 1;
+  var clientEnded = false;
+  var serverEnded = false;
 
   self.state = {
-    readies: 0,
+    clientReady: false,
+    serverReady: false,
     requests: 0,
     responses: 0
   };
@@ -884,21 +883,29 @@ function setup(self) {
     assert(false, makeMsg(self.what, 'Unexpected ' + which + ' error: ' + err));
   }
   function onReady() {
-    assert(self.state.readies < 2,
-           makeMsg(self.what, 'Saw too many ready events'));
-    if (++self.state.readies === 2)
-      self.onReady();
+    if (this === self.client) {
+      assert(!self.state.clientReady,
+             makeMsg(self.what, 'Received multiple ready events for client'));
+      self.state.clientReady = true;
+    } else {
+      assert(!self.state.serverReady,
+             makeMsg(self.what, 'Received multiple ready events for server'));
+      self.state.serverReady = true;
+    }
+    if (self.state.clientReady && self.state.serverReady)
+      self.onReady && self.onReady();
   }
   function onEnd() {
-    if (this === self.server)
-      ++serverEnds;
-    else
-      ++clientEnds;
-    assert(serverEnds <= 1,
-           makeMsg(self.what, 'Saw too many server end events'));
-    assert(clientEnds <= 1,
-           makeMsg(self.what, 'Saw too many client end/close events'));
-    if (serverEnds + clientEnds === 2) {
+    if (this === self.client) {
+      assert(!clientEnded,
+             makeMsg(self.what, 'Received multiple close events for client'));
+      clientEnded = true;
+    } else {
+      assert(!serverEnded,
+             makeMsg(self.what, 'Received multiple close events for server'));
+      serverEnded = true;
+    }
+    if (clientEnded && serverEnded) {
       if (expectedRequests > 0) {
         assert(self.state.requests === expectedRequests,
                makeMsg(self.what, 'Missing request(s)'));

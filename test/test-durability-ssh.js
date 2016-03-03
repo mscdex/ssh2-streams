@@ -1,18 +1,22 @@
-var SSH2Stream = require('../lib/ssh'),
-    constants = require('../lib/constants');
+var SSH2Stream = require('../lib/ssh');
+var constants = require('../lib/constants');
 
-var fs = require('fs'),
-    path = require('path'),
-    inspect = require('util').inspect,
-    inherits = require('util').inherits,
-    TransformStream = require('stream').Transform,
-    assert = require('assert');
+var fs = require('fs');
+var path = require('path');
+var inspect = require('util').inspect;
+var inherits = require('util').inherits;
+var TransformStream = require('stream').Transform;
+var assert = require('assert');
 
-var t = -1,
-    group = path.basename(__filename, '.js') + '/',
-    fixturesdir = path.join(__dirname, 'fixtures');
+var t = -1;
+var group = path.basename(__filename, '.js') + '/';
+var fixturesdir = path.join(__dirname, 'fixtures');
 
 var HOST_KEY_RSA = fs.readFileSync(path.join(fixturesdir, 'ssh_host_rsa_key'));
+var SERVER_CONFIG = {
+  server: true,
+  privateKey: HOST_KEY_RSA
+};
 
 function SimpleStream() {
   TransformStream.call(this);
@@ -26,10 +30,10 @@ SimpleStream.prototype._transform = function(chunk, encoding, cb) {
 
 var tests = [
   { run: function() {
-      var what = this.what,
-          serverError = false,
-          server = new SSH2Stream({ server: true, privateKey: HOST_KEY_RSA }),
-          client = new SimpleStream();
+      var what = this.what;
+      var serverError = false;
+      var server = new SSH2Stream(SERVER_CONFIG);
+      var client = new SimpleStream();
 
       client.pipe(server).pipe(client);
 
@@ -49,10 +53,10 @@ var tests = [
     what: 'Incompatible client SSH protocol version'
   },
   { run: function() {
-      var what = this.what,
-          serverError = false,
-          server = new SSH2Stream({ server: true, privateKey: HOST_KEY_RSA }),
-          client = new SimpleStream();
+      var what = this.what;
+      var serverError = false;
+      var server = new SSH2Stream(SERVER_CONFIG);
+      var client = new SimpleStream();
 
       client.pipe(server).pipe(client);
 
@@ -71,10 +75,10 @@ var tests = [
     what: 'Malformed client protocol identification'
   },
   { run: function() {
-      var what = this.what,
-          serverError = false,
-          server = new SSH2Stream({ server: true, privateKey: HOST_KEY_RSA }),
-          client = new SimpleStream();
+      var what = this.what;
+      var serverError = false;
+      var server = new SSH2Stream(SERVER_CONFIG);
+      var client = new SimpleStream();
 
       client.pipe(server).pipe(client);
 
@@ -97,10 +101,10 @@ var tests = [
     what: 'SSH client protocol identification too long (> 255 characters)'
   },
   { run: function() {
-      var what = this.what,
-          serverError = false,
-          server = new SSH2Stream({ server: true, privateKey: HOST_KEY_RSA }),
-          client = new SimpleStream();
+      var what = this.what;
+      var serverError = false;
+      var server = new SSH2Stream(SERVER_CONFIG);
+      var client = new SimpleStream();
 
       client.pipe(server).pipe(client);
 
@@ -120,10 +124,10 @@ var tests = [
     what: 'Bad packet length (max)'
   },
   { run: function() {
-      var what = this.what,
-          serverError = false,
-          server = new SSH2Stream({ server: true, privateKey: HOST_KEY_RSA }),
-          client = new SimpleStream();
+      var what = this.what;
+      var serverError = false;
+      var server = new SSH2Stream(SERVER_CONFIG);
+      var client = new SimpleStream();
 
       client.pipe(server).pipe(client);
 
