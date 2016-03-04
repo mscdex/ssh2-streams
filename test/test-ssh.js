@@ -1,10 +1,13 @@
 var SSH2Stream = require('../lib/ssh');
 var utils = require('../lib/utils');
 var parseKey = utils.parseKey;
+var genPubKey = utils.genPublicKey;
 
 var basename = require('path').basename;
 var inspect = require('util').inspect;
-var assert = require('assert');
+var assert_ = require('assert');
+var inherits = require('util').inherits;
+var TransformStream = require('stream').Transform;
 
 var group = basename(__filename, '.js') + '/';
 var t = -1;
@@ -12,12 +15,73 @@ var EMPTY_BUFFER = new Buffer(0);
 var SERVER_KEY = require('fs').readFileSync(__dirname
                                             + '/fixtures/ssh_host_rsa_key');
 
+function SimpleStream() {
+  TransformStream.call(this);
+  this.buffer = '';
+}
+inherits(SimpleStream, TransformStream);
+SimpleStream.prototype._transform = function(chunk, encoding, cb) {
+  this.buffer += chunk.toString('binary');
+  cb(null, chunk);
+};
+
 var tests = [
+  // client-side tests
+  { run: function() {
+      var algos = ['ssh-dss', 'ssh-rsa', 'ecdsa-sha2-nistp521'];
+      var client = new SSH2Stream({
+        algorithms: {
+          serverHostKey: algos
+        }
+      });
+      var clientBufStream = new SimpleStream();
+      var clientReady = false;
+      var server = new SSH2Stream({
+        server: true,
+        hostKeys: { 'ssh-rsa': makeServerKey(SERVER_KEY) }
+      });
+      var serverBufStream = new SimpleStream();
+      var serverReady = false;
+
+      function onNEWKEYS() {
+        if (this === client) {
+          assert(!clientReady, 'Already received client NEWKEYS event');
+          clientReady = true;
+        } else {
+          assert(!serverReady, 'Already received server NEWKEYS event');
+          serverReady = true;
+        }
+        if (clientReady && serverReady) {
+          var traffic = clientBufStream.buffer;
+          var algoList = algos.join(',');
+          var re = new RegExp('\x00\x00\x00'
+                              + hexByte(algoList.length)
+                              + algoList);
+          assert(re.test(traffic), 'Unexpected client algorithms');
+
+          traffic = serverBufStream.buffer;
+          assert(/\x00\x00\x00\x07ssh-rsa/.test(traffic),
+                 'Unexpected server algorithms');
+
+          next();
+        }
+      }
+
+      client.on('NEWKEYS', onNEWKEYS);
+      server.on('NEWKEYS', onNEWKEYS);
+
+      client.pipe(clientBufStream)
+            .pipe(server)
+            .pipe(serverBufStream)
+            .pipe(client);
+    },
+    what: 'Custom algorithms'
+  },
   // server-side tests
   { run: function() {
       var stream = new SSH2Stream({
         server: true,
-        hostKeys: { 'ssh-rsa': parseKey(SERVER_KEY) }
+        hostKeys: { 'ssh-rsa': makeServerKey(SERVER_KEY) }
       });
       var result;
       var expected;
@@ -45,6 +109,18 @@ var tests = [
     what: 'authPKOK'
   },
 ];
+
+function makeServerKey(raw) {
+  var privateKey = parseKey(raw);
+  return {
+    privateKey: privateKey,
+    publicKey: genPubKey(privateKey)
+  };
+}
+
+function hexByte(n) {
+  return String.fromCharCode(n);
+}
 
 function skipIdent(stream) {
   var buf = EMPTY_BUFFER;
@@ -84,7 +160,11 @@ function assertDeepEqual(actual, expected, msg) {
          + inspect(actual)
          + '\nExpected:\n'
          + inspect(expected);
-  assert.deepEqual(actual, expected, makeMsg(tests[t].what, msg));
+  assert_.deepEqual(actual, expected, makeMsg(tests[t].what, msg));
+}
+function assert(expression, msg) {
+  msg || (msg = 'failed assertion');
+  assert_(expression, makeMsg(tests[t].what, msg));
 }
 
 
@@ -104,9 +184,9 @@ function makeMsg(what, msg) {
 }
 
 process.once('exit', function() {
-  assert(t === tests.length,
-         makeMsg('_exit',
-                 'Only finished ' + t + '/' + tests.length + ' tests'));
+  assert_(t === tests.length,
+          makeMsg('_exit',
+                  'Only finished ' + t + '/' + tests.length + ' tests'));
 });
 
 next();
