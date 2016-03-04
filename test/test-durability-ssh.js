@@ -1,5 +1,4 @@
 var SSH2Stream = require('../lib/ssh');
-var constants = require('../lib/constants');
 
 var fs = require('fs');
 var path = require('path');
