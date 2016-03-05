@@ -390,16 +390,16 @@ SSH2Stream methods
             * Default values:
 
                 1. ssh-rsa
-                2. ecdsa-sha2-nistp256 **(node v0.11.14 or newer)**
-                3. ecdsa-sha2-nistp384 **(node v0.11.14 or newer)**
-                4. ecdsa-sha2-nistp521 **(node v0.11.14 or newer)**
+                2. ecdsa-sha2-nistp256 **(node v5.2.0 or newer)**
+                3. ecdsa-sha2-nistp384 **(node v5.2.0 or newer)**
+                4. ecdsa-sha2-nistp521 **(node v5.2.0 or newer)**
 
             * Supported values:
 
                 * ssh-rsa
-                * ecdsa-sha2-nistp256 **(node v0.11.14 or newer)**
-                * ecdsa-sha2-nistp384 **(node v0.11.14 or newer)**
-                * ecdsa-sha2-nistp521 **(node v0.11.14 or newer)**
+                * ecdsa-sha2-nistp256 **(node v5.2.0 or newer)**
+                * ecdsa-sha2-nistp384 **(node v5.2.0 or newer)**
+                * ecdsa-sha2-nistp521 **(node v5.2.0 or newer)**
                 * ssh-dss
 
         * **hmac** - _array_ - (H)MAC algorithms.
