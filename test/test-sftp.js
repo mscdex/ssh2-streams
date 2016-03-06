@@ -782,6 +782,65 @@ var tests = [
     },
     what: 'ReadStream (error)'
   },
+  { run: function() {
+      setup(this);
+
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
+
+      this.onReady = function() {
+        var opens = 0;
+        var writes = 0;
+        var closes = 0;
+        var path_ = '/foo/bar/baz';
+        var handle_ = new Buffer('hi mom!');
+        var data_ = new Buffer('hello world');
+        var expFlags = OPEN_MODE.TRUNC | OPEN_MODE.CREAT | OPEN_MODE.WRITE;
+        server.on('OPEN', function(id, path, pflags, attrs) {
+          assert(++opens === 1, makeMsg(what, 'Saw too many OPENs'));
+          assert(id === 0, makeMsg(what, 'Wrong request id: ' + id));
+          assert(path === path_, makeMsg(what, 'Wrong path: ' + path));
+          assert(pflags === expFlags,
+                 makeMsg(what, 'Wrong flags: ' + flagsToHuman(pflags)));
+          server.handle(id, handle_);
+        }).on('WRITE', function(id, handle, offset, data) {
+          assert(++writes <= 3, makeMsg(what, 'Saw too many WRITEs'));
+          assert(id === writes, makeMsg(what, 'Wrong request id: ' + id));
+          assert.deepEqual(handle, handle_, makeMsg(what, 'handle mismatch'));
+          assert(offset === ((writes - 1) * data_.length),
+                 makeMsg(what, 'Wrong write offset: ' + offset));
+          assert.deepEqual(data, data_, makeMsg(what, 'Wrong data'));
+          server.status(id, STATUS_CODE.OK);
+        }).on('CLOSE', function(id, handle) {
+          ++self.state.requests;
+          assert(++closes === 1, makeMsg(what, 'Saw too many CLOSEs'));
+          assert(id === 4, makeMsg(what, 'Wrong request id: ' + id));
+          assert.deepEqual(handle, handle_, makeMsg(what, 'handle mismatch'));
+          server.status(id, STATUS_CODE.OK);
+          server.end();
+        }).on('end', function() {
+          assert(++self.state.responses === 1,
+                 makeMsg(what, 'Saw too many responses'));
+          assert(opens === 1, makeMsg(what, 'Wrong OPEN count'));
+          assert(writes === 3, makeMsg(what, 'Wrong WRITE count'));
+          assert(closes === 1, makeMsg(what, 'Wrong CLOSE count'));
+        });
+
+        var writer = client.createWriteStream(path_);
+        if (writer.cork)
+          writer.cork();
+        writer.write(data_);
+        writer.write(data_);
+        writer.write(data_);
+        if (writer.uncork)
+          writer.uncork();
+        writer.end();
+      };
+    },
+    what: 'WriteStream'
+  },
 
 // other client request scenarios
   { run: function() {
