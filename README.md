@@ -97,7 +97,7 @@ SSH2Stream events
 
 **Client-only events**
 
-* **fingerprint**(< _Buffer_ >hostKey, < _function_ >callback) - This event allows you to (synchronously) verify a host's key. If `callback` is called with any value other than `undefined` or `true`, a disconnection will occur. The default behavior is to auto-allow any host key.
+* **fingerprint**(< _Buffer_ >hostKey, < _function_ >callback) - This event allows you to verify a host's key. If `callback` is called with `true`, the handshake continues. Otherwise a disconnection will occur if `callback` is called with `false`. The default behavior is to auto-allow any host key if there are no handlers for this event.
 
 * **SERVICE_ACCEPT**(< _string_ >serviceName)
 
