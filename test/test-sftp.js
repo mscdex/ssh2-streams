@@ -127,14 +127,56 @@ var tests = [
           server.status(id, STATUS_CODE.OK);
           server.end();
         });
-        client.writeData(handle_, buf, 0, buf.length, 5, function(err) {
+        client.writeData(handle_, buf, 0, buf.length, 5, function(err, nb) {
           assert(++self.state.responses === 1,
                  makeMsg(what, 'Saw too many responses'));
           assert(!err, makeMsg(what, 'Unexpected writeData() error: ' + err));
+          assert.equal(nb, buf.length);
         });
       };
     },
     what: 'write'
+  },
+  { run: function() {
+      setup(this);
+
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
+
+      this.onReady = function() {
+        var handle_ = new Buffer('node.js');
+        var buf = new Buffer(3 * 32 * 1024);
+        server.on('WRITE', function(id, handle, offset, data) {
+          ++self.state.requests;
+          assert.equal(id,
+                       self.state.requests - 1,
+                       makeMsg(what, 'Wrong request id: ' + id));
+          assert.deepEqual(handle, handle_, makeMsg(what, 'handle mismatch'));
+          assert.equal(offset,
+                       (self.state.requests - 1) * 32 * 1024,
+                       makeMsg(what, 'Wrong write offset: ' + offset));
+          assert((offset + data.length) <= buf.length);
+          assert.deepEqual(data,
+                           buf.slice(offset, offset + data.length),
+                           makeMsg(what, 'write data mismatch'));
+          server.status(id, STATUS_CODE.OK);
+          if (self.state.requests === 3)
+            server.end();
+        });
+        client.writeData(handle_, buf, 0, buf.length, 0, function(err, nb) {
+          ++self.state.responses;
+          assert(!err, makeMsg(what, 'Unexpected writeData() error: ' + err));
+          assert.equal(nb, buf.length);
+        });
+      };
+    },
+    expected: {
+      requests: 3,
+      responses: 1
+    },
+    what: 'write (overflow)'
   },
   { run: function() {
       setup(this);
@@ -965,13 +1007,18 @@ function setup(self) {
       serverEnded = true;
     }
     if (clientEnded && serverEnded) {
+      var msg;
       if (expectedRequests > 0) {
+        msg = 'Expected ' + expectedRequests + ' request(s) but received '
+              + self.state.requests;
         assert(self.state.requests === expectedRequests,
-               makeMsg(self.what, 'Missing request(s)'));
+               makeMsg(self.what, msg));
       }
       if (expectedResponses > 0) {
+        msg = 'Expected ' + expectedResponses + ' response(s) but received '
+              + self.state.responses;
         assert(self.state.responses === expectedResponses,
-               makeMsg(self.what, 'Missing response(s)'));
+               makeMsg(self.what, msg));
       }
       next();
     }
