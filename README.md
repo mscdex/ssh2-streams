@@ -3,6 +3,8 @@ Description
 
 SSH2 and SFTP(v3) client/server protocol streams for [node.js](http://nodejs.org/).
 
+[![Build Status](https://travis-ci.org/mscdex/ssh2-streams.svg?branch=master)](https://travis-ci.org/mscdex/ssh2-streams)
+
 
 Requirements
 ============
