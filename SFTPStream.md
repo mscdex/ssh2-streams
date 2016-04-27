@@ -269,9 +269,12 @@ SFTPStream methods
 * **createWriteStream**(< _string_ >path[, < _object_ >options]) - _WriteStream_ - Returns a new writable stream for `path`. `options` has the following defaults:
 
     ```javascript
-    { flags: 'w',
+    {
+      flags: 'w',
       encoding: null,
-      mode: 0666 }
+      mode: 0666,
+      autoClose: true
+    }
     ```
 
     `options` may also include a `start` option to allow writing data at some position past the beginning of the file. Modifying a file rather than replacing it may require a flags mode of 'r+' rather than the default mode 'w'.
