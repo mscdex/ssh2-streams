@@ -227,7 +227,7 @@ SFTPStream methods
 
 * **fastGet**(< _string_ >remotePath, < _string_ >localPath[, < _object_ >options], < _function_ >callback) - _(void)_ - Downloads a file at `remotePath` to `localPath` using parallel reads for faster throughput. `options` can have the following properties:
 
-    * concurrency - _integer_ - Number of concurrent reads **Default:** `25`
+    * concurrency - _integer_ - Number of concurrent reads **Default:** `64`
 
     * chunkSize - _integer_ - Size of each read in bytes **Default:** `32768`
 
@@ -237,7 +237,7 @@ SFTPStream methods
 
 * **fastPut**(< _string_ >localPath, < _string_ >remotePath[, < _object_ >options], < _function_ >callback) - _(void)_ - Uploads a file from `localPath` to `remotePath` using parallel reads for faster throughput. `options` can have the following properties:
 
-    * concurrency - _integer_ - Number of concurrent reads **Default:** `25`
+    * concurrency - _integer_ - Number of concurrent reads **Default:** `64`
 
     * chunkSize - _integer_ - Size of each read in bytes **Default:** `32768`
 
