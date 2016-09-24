@@ -954,6 +954,59 @@ var tests = [
     },
     what: '"continue" event after push() === false'
   },
+  { run: function() {
+      var self = this;
+      var client = new SFTPStream();
+      client.once('ready', function() {
+        client.open('/foo/bar', 'w', function(err, handle) {
+          assert(err, 'Expected error');
+          assert.strictEqual(err.code, 4);
+          assert.strictEqual(err.message, 'Uh oh');
+          assert.strictEqual(err.lang, '');
+          next();
+        });
+        client.write(new Buffer([
+          0, 0, 0, 18,
+          101,
+          0, 0, 0, 0,
+          0, 0, 0, SFTPStream.STATUS_CODE.FAILURE,
+          0, 0, 0, 5,  85, 104, 32, 111, 104
+        ]));
+      });
+      client.write(new Buffer([
+        0, 0, 0, 5,
+        2,
+        0, 0, 0, 3
+      ]));
+    },
+    what: 'Can parse status response without language'
+  },
+  { run: function() {
+      var self = this;
+      var client = new SFTPStream();
+      client.once('ready', function() {
+        client.open('/foo/bar', 'w', function(err, handle) {
+          assert(err, 'Expected error');
+          assert.strictEqual(err.code, 4);
+          assert.strictEqual(err.message, 'Failure');
+          assert.strictEqual(err.lang, '');
+          next();
+        });
+        client.write(new Buffer([
+          0, 0, 0, 9,
+          101,
+          0, 0, 0, 0,
+          0, 0, 0, SFTPStream.STATUS_CODE.FAILURE
+        ]));
+      });
+      client.write(new Buffer([
+        0, 0, 0, 5,
+        2,
+        0, 0, 0, 3
+      ]));
+    },
+    what: 'Can parse status response without message'
+  },
 ];
 
 function setup(self) {
