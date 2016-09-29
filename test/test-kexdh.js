@@ -20,7 +20,15 @@ var server = new SSH2Stream({
   }
 });
 var client = new SSH2Stream();
-var error;
+var cliError;
+var srvError;
+
+server.on('error', function(err) {
+  assert(err);
+  assert(/unexpected/.test(err.message));
+  assert(!srvError);
+  srvError = err;
+});
 
 // Removed 'KEXDH_REPLY' listeners as it causes client to send 'NEWKEYS' which
 // changes server's state.
@@ -41,16 +49,18 @@ client.on('KEXDH_REPLY', function(info) {
   SSH2Stream._send(client, buf, undefined, true);
 });
 client.on('error', function(err) {
+  assert(!cliError);
   assert(err);
   assert.equal(
     err.message,
     'PROTOCOL_ERROR',
     'Expected Error: PROTOCOL_ERROR Got Error: ' + err.message
   );
-  error = err;
+  cliError = err;
 });
 client.pipe(server).pipe(client);
 
 process.on('exit', function() {
-  assert(error, 'Expected client error');
+  assert(cliError, 'Expected client error');
+  //assert(srvError, 'Expected server error');
 });
