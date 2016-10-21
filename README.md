@@ -326,7 +326,9 @@ SSH2Stream methods
 
     * **hostKeys** - _object_ - If in server mode, an object keyed on host key format (see supported `serverHostKey` values in `algorithms` option below) with values being (decrypted) _Buffer_s or _string_s that contain PEM-encoded (OpenSSH format) host private key(s). **Default:** (none)
 
-    * **banner** - _string_ - If in server mode, an optional message to send to the user immediately upon connection, before the handshake. **Default:** (none)
+    * **greeting** - _string_ - If in server mode, an optional message to send to the user immediately upon connection, before the handshake. **Note:** Most clients usually ignore this. **Default:** (none)
+
+    * **banner** - _string_ - If in server mode, an optional message to send to the user once, right before authentication begins. **Default:** (none)
 
     * **ident** - _string_ - A custom software name/version identifier. **Default:** `'ssh2js' + moduleVersion + 'srv'` (server mode) `'ssh2js' + moduleVersion` (client mode)
 
