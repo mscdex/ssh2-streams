@@ -834,6 +834,7 @@ var tests = [
         var opens = 0;
         var writes = 0;
         var closes = 0;
+        var fsetstat = false;
         var path_ = '/foo/bar/baz';
         var handle_ = new Buffer('hi mom!');
         var data_ = new Buffer('hello world');
@@ -845,9 +846,17 @@ var tests = [
           assert(pflags === expFlags,
                  makeMsg(what, 'Wrong flags: ' + flagsToHuman(pflags)));
           server.handle(id, handle_);
+        }).once('FSETSTAT', function(id, handle, attrs) {
+          fsetstat = true;
+          assert(id === 1, makeMsg(what, 'Wrong request id: ' + id));
+          assert.deepEqual(handle, handle_, makeMsg(what, 'handle mismatch'));
+          assert.strictEqual(attrs.mode,
+                             parseInt('0666', 8),
+                             makeMsg(what, 'Wrong file mode'));
+          server.status(id, STATUS_CODE.OK);
         }).on('WRITE', function(id, handle, offset, data) {
           assert(++writes <= 3, makeMsg(what, 'Saw too many WRITEs'));
-          assert(id === writes, makeMsg(what, 'Wrong request id: ' + id));
+          assert(id === writes + 1, makeMsg(what, 'Wrong request id: ' + id));
           assert.deepEqual(handle, handle_, makeMsg(what, 'handle mismatch'));
           assert(offset === ((writes - 1) * data_.length),
                  makeMsg(what, 'Wrong write offset: ' + offset));
@@ -856,7 +865,7 @@ var tests = [
         }).on('CLOSE', function(id, handle) {
           ++self.state.requests;
           assert(++closes === 1, makeMsg(what, 'Saw too many CLOSEs'));
-          assert(id === 4, makeMsg(what, 'Wrong request id: ' + id));
+          assert(id === 5, makeMsg(what, 'Wrong request id: ' + id));
           assert.deepEqual(handle, handle_, makeMsg(what, 'handle mismatch'));
           server.status(id, STATUS_CODE.OK);
           server.end();
@@ -866,6 +875,7 @@ var tests = [
           assert(opens === 1, makeMsg(what, 'Wrong OPEN count'));
           assert(writes === 3, makeMsg(what, 'Wrong WRITE count'));
           assert(closes === 1, makeMsg(what, 'Wrong CLOSE count'));
+          assert(fsetstat, makeMsg(what, 'Expected FSETSTAT'));
         });
 
         var writer = client.createWriteStream(path_);
