@@ -227,21 +227,23 @@ SFTPStream methods
 
 * **fastGet**(< _string_ >remotePath, < _string_ >localPath[, < _object_ >options], < _function_ >callback) - _(void)_ - Downloads a file at `remotePath` to `localPath` using parallel reads for faster throughput. `options` can have the following properties:
 
-    * concurrency - _integer_ - Number of concurrent reads **Default:** `64`
+    * **concurrency** - _integer_ - Number of concurrent reads **Default:** `64`
 
-    * chunkSize - _integer_ - Size of each read in bytes **Default:** `32768`
+    * **chunkSize** - _integer_ - Size of each read in bytes **Default:** `32768`
 
-    * step - _function_(< _integer_ >total_transferred, < _integer_ >chunk, < _integer_ >total) - Called every time a part of a file was transferred
+    * **step** - _function_(< _integer_ >total_transferred, < _integer_ >chunk, < _integer_ >total) - Called every time a part of a file was transferred
 
     `callback` has 1 parameter: < _Error_ >err.
 
 * **fastPut**(< _string_ >localPath, < _string_ >remotePath[, < _object_ >options], < _function_ >callback) - _(void)_ - Uploads a file from `localPath` to `remotePath` using parallel reads for faster throughput. `options` can have the following properties:
 
-    * concurrency - _integer_ - Number of concurrent reads **Default:** `64`
+    * **concurrency** - _integer_ - Number of concurrent reads **Default:** `64`
 
-    * chunkSize - _integer_ - Size of each read in bytes **Default:** `32768`
+    * **chunkSize** - _integer_ - Size of each read in bytes **Default:** `32768`
 
-    * step - _function_(< _integer_ >total_transferred, < _integer_ >chunk, < _integer_ >total) - Called every time a part of a file was transferred
+    * **step** - _function_(< _integer_ >total_transferred, < _integer_ >chunk, < _integer_ >total) - Called every time a part of a file was transferred
+
+    * **mode** - _mixed_ - Integer or string representing the file mode to set for the uploaded file.
 
     `callback` has 1 parameter: < _Error_ >err.
 
@@ -251,7 +253,7 @@ SFTPStream methods
     { flags: 'r',
       encoding: null,
       handle: null,
-      mode: 0666,
+      mode: 0o666,
       autoClose: true
     }
     ```
@@ -272,7 +274,7 @@ SFTPStream methods
     {
       flags: 'w',
       encoding: null,
-      mode: 0666,
+      mode: 0o666,
       autoClose: true
     }
     ```
@@ -281,7 +283,7 @@ SFTPStream methods
 
     If 'autoClose' is set to false and you pipe to this stream, this stream will not automatically close after there is no more data upstream -- allowing future pipes and/or manual writes.
 
-* **open**(< _string_ >filename, < _string_ >mode, [< _ATTRS_ >attributes, ]< _function_ >callback) - _boolean_ - Opens a file `filename` for `mode` with optional `attributes`. `mode` is any of the modes supported by fs.open (except sync mode). Returns `false` if you should wait for the `continue` event before sending any more traffic. `callback` has 2 parameters: < _Error_ >err, < _Buffer_ >handle.
+* **open**(< _string_ >filename, < _string_ >flags, [< _mixed_ >attrs_mode, ]< _function_ >callback) - _boolean_ - Opens a file `filename` with `flags` with optional _ATTRS_ object or file mode `attrs_mode`. `flags` is any of the flags supported by `fs.open` (except sync flag). Returns `false` if you should wait for the `continue` event before sending any more traffic. `callback` has 2 parameters: < _Error_ >err, < _Buffer_ >handle.
 
 * **close**(< _Buffer_ >handle, < _function_ >callback) - _boolean_ - Closes the resource associated with `handle` given by open() or opendir(). Returns `false` if you should wait for the `continue` event before sending any more traffic. `callback` has 1 parameter: < _Error_ >err.
 
