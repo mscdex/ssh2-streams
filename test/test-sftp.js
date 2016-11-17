@@ -742,6 +742,56 @@ var tests = [
       var server = this.server;
 
       this.onReady = function() {
+        var path_ = '/foo/bar/baz';
+        var handle_ = new Buffer('hi mom!');
+        var data_ = new Buffer('hello world');
+        server.once('OPEN', function(id, path, pflags, attrs) {
+          assert(id === 0, makeMsg(what, 'Wrong request id: ' + id));
+          assert(path === path_, makeMsg(what, 'Wrong path: ' + path));
+          assert(pflags === OPEN_MODE.READ,
+                 makeMsg(what, 'Wrong flags: ' + flagsToHuman(pflags)));
+          server.handle(id, handle_);
+        }).once('FSTAT', function(id, handle) {
+          assert(id === 1, makeMsg(what, 'Wrong request id: ' + id));
+          var attrs = new Stats({
+            size: data_.length,
+            uid: 9001,
+            gid: 9001,
+            atime: (Date.now() / 1000) | 0,
+            mtime: (Date.now() / 1000) | 0
+          });
+          server.attrs(id, attrs);
+        }).once('READ', function(id, handle, offset, len) {
+          assert(id === 2, makeMsg(what, 'Wrong request id: ' + id));
+          assert.deepEqual(handle, handle_, makeMsg(what, 'handle mismatch'));
+          assert(offset === 0, makeMsg(what, 'Wrong read offset: ' + offset));
+          server.data(id, data_);
+        }).once('CLOSE', function(id, handle) {
+          ++self.state.requests;
+          assert(id === 3, makeMsg(what, 'Wrong request id: ' + id));
+          assert.deepEqual(handle, handle_, makeMsg(what, 'handle mismatch'));
+          server.status(id, STATUS_CODE.OK);
+          server.end();
+        });
+        var buf = [];
+        client.readFile(path_, function(err, buf) {
+          ++self.state.responses;
+          assert(!err, makeMsg(what, 'Unexpected error: ' + err));
+          assert.deepEqual(buf, data_, makeMsg(what, 'data mismatch'));
+        });
+      };
+    },
+    what: 'readFile'
+  },
+  { run: function() {
+      setup(this);
+
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
+
+      this.onReady = function() {
         var opens = 0;
         var reads = 0;
         var closes = 0;
@@ -773,7 +823,7 @@ var tests = [
           server.end();
         });
         var buf = [];
-        client.createReadStream(path_).on('readable', function() { 
+        client.createReadStream(path_).on('readable', function() {
           var chunk;
           while ((chunk = this.read()) !== null) {
             buf.push(chunk);
