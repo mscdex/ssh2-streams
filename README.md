@@ -21,13 +21,13 @@ Install
 API
 ===
 
-`require('ssh2').SSH2Stream` returns an **_SSH2Stream_** constructor.
+`require('ssh2-streams').SSH2Stream` returns an **_SSH2Stream_** constructor.
 
-`require('ssh2').SFTPStream` returns an [**_SFTPStream_**](SFTPStream.md) constructor.
+`require('ssh2-streams').SFTPStream` returns an [**_SFTPStream_**](SFTPStream.md) constructor.
 
-`require('ssh2').utils` returns an _object_ of useful utility functions.
+`require('ssh2-streams').utils` returns an _object_ of useful utility functions.
 
-`require('ssh2').constants` returns an _object_ containing useful SSH protocol constants.
+`require('ssh2-streams').constants` returns an _object_ containing useful SSH protocol constants.
 
 
 SSH2Stream events
