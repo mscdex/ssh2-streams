@@ -784,6 +784,65 @@ var tests = [
     what: 'readFile'
   },
   { run: function() {
+    setup(this);
+
+    var self = this;
+    var what = this.what;
+    var client = this.client;
+    var server = this.server;
+
+    this.onReady = function() {
+      var path_ = '/foo/bar/baz';
+      var handle_ = new Buffer('hi mom!');
+      var data_ = new Buffer('hello world');
+      var reads = 0;
+      server.once('OPEN', function(id, path, pflags, attrs) {
+        assert(id === 0, makeMsg(what, 'Wrong request id: ' + id));
+        assert(path === path_, makeMsg(what, 'Wrong path: ' + path));
+        assert(pflags === OPEN_MODE.READ,
+          makeMsg(what, 'Wrong flags: ' + flagsToHuman(pflags)));
+        server.handle(id, handle_);
+      }).once('FSTAT', function(id, handle) {
+        assert(id === 1, makeMsg(what, 'Wrong request id: ' + id));
+        var attrs = new Stats({
+          uid: 9001,
+          gid: 9001,
+          atime: (Date.now() / 1000) | 0,
+          mtime: (Date.now() / 1000) | 0
+        });
+        server.attrs(id, attrs);
+      }).on('READ', function(id, handle, offset, len) {
+        assert(++reads <= 2, makeMsg(what, 'Saw too many READs'));
+        assert(id === 2 || id === 3, makeMsg(what, 'Wrong request id: ' + id));
+        assert.deepEqual(handle, handle_, makeMsg(what, 'handle mismatch'));
+        switch(id) {
+          case 2:
+            assert(offset === 0, makeMsg(what, 'Wrong read offset for first read: ' + offset));
+            server.data(id, data_);
+            break;
+          case 3:
+            assert(offset === data_.length, makeMsg(what, 'Wrong read offset for second read: ' + offset));
+            server.status(id, STATUS_CODE.EOF);
+            break;
+        }
+      }).once('CLOSE', function(id, handle) {
+        ++self.state.requests;
+        assert(id === 4, makeMsg(what, 'Wrong request id: ' + id));
+        assert.deepEqual(handle, handle_, makeMsg(what, 'handle mismatch'));
+        server.status(id, STATUS_CODE.OK);
+        server.end();
+      });
+      var buf = [];
+      client.readFile(path_, function(err, buf) {
+        ++self.state.responses;
+        assert(!err, makeMsg(what, 'Unexpected error: ' + err));
+        assert.deepEqual(buf, data_, makeMsg(what, 'data mismatch'));
+      });
+    };
+  },
+    what: 'readFile (no size from fstat)'
+  },
+  { run: function() {
       setup(this);
 
       var self = this;
