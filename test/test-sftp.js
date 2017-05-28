@@ -1067,6 +1067,48 @@ var tests = [
     },
     what: 'Can parse status response without message'
   },
+  { run: function() {
+      var self = this;
+      var err;
+      var client = new SFTPStream();
+      client.once('ready', function() {
+        assert(false, 'Handshake should not succeed');
+      }).once('error', function(err_) {
+        err = err_;
+      }).once('end', function() {
+        assert.strictEqual(err && err.message,
+                           'Unexpected packet before version');
+        next();
+      });
+      client.write(new Buffer([
+        1, 2, 3, 4,
+        5,
+        6, 7, 8, 9
+      ]));
+    },
+    what: 'End SFTP stream on bad handshake (client)'
+  },
+  { run: function() {
+      var self = this;
+      var err;
+      var client = new SFTPStream({ server: true });
+      client.once('ready', function() {
+        assert(false, 'Handshake should not succeed');
+      }).once('error', function(err_) {
+        err = err_;
+      }).once('end', function() {
+        assert.strictEqual(err && err.message,
+                           'Unexpected packet before init');
+        next();
+      });
+      client.write(new Buffer([
+        1, 2, 3, 4,
+        5,
+        6, 7, 8, 9
+      ]));
+    },
+    what: 'End SFTP stream on bad handshake (server)'
+  },
 ];
 
 function setup(self) {
