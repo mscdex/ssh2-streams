@@ -1107,7 +1107,7 @@ var tests = [
         client.open('/foo/bar', 'w', function(err, handle) {
           assert(err, 'Expected error');
           assert.strictEqual(err.code, 4);
-          assert.strictEqual(err.message, 'Failure');
+          assert.strictEqual(err.message, SFTPStream.STATUS_CODE_STR[4]);
           assert.strictEqual(err.lang, '');
           next();
         });
