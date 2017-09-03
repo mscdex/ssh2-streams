@@ -289,7 +289,7 @@ SFTPStream methods
 
 * **readData**(< _Buffer_ >handle, < _Buffer_ >buffer, < _integer_ >offset, < _integer_ >length, < _integer_ >position, < _function_ >callback) - _boolean_ - Reads `length` bytes from the resource associated with `handle` starting at `position` and stores the bytes in `buffer` starting at `offset`. Returns `false` if you should wait for the `continue` event before sending any more traffic. `callback` has 4 parameters: < _Error_ >err, < _integer_ >bytesRead, < _Buffer_ >buffer (offset adjusted), < _integer_ >position.
 
-* **writeData**(< _Buffer_ >handle, < _Buffer_ >buffer, < _integer_ >offset, < _integer_ >length, < _integer_ >position, < _function_ >callback) - _boolean_ - Writes `length` bytes from `buffer` starting at `offset` to the resource associated with `handle` starting at `position`. Returns `false` if you should wait for the `continue` event before sending any more traffic. `callback` has 1 parameter: < _Error_ >err.
+* **writeData**(< _Buffer_ >handle, < _Buffer_ >buffer, < _integer_ >offset, < _integer_ >length, < _integer_ >position, < _function_ >callback) - _boolean_ - Writes `length` bytes from `buffer` starting at `offset` to the resource associated with `handle` starting at `position`. Returns `false` if you should wait for the `continue` event before sending any more traffic. `callback` has 2 parameter: < _Error_ >err, < _integer_ >totalBytesWrite.
 
 * **fstat**(< _Buffer_ >handle, < _function_ >callback) - _boolean_ - Retrieves attributes for the resource associated with `handle`. Returns `false` if you should wait for the `continue` event before sending any more traffic. `callback` has 2 parameters: < _Error_ >err, < _Stats_ >stats.
 
