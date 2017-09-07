@@ -1207,6 +1207,35 @@ var tests = [
     },
     what: 'Abort on data chunk larger than requested'
   },
+  { run: function() {
+      setup(this);
+
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      client._state.extensions['statvfs@openssh.com'] = ['2'];
+
+      this.onReady = function() {
+        var pathOne_ = '/foo/baz';
+        client.ext_openssh_statvfs(pathOne_, function(err, fsInfo) {
+          assert(++self.state.responses === 1,
+                 makeMsg(what, 'Saw too many responses'));
+          assert(err && err.code === STATUS_CODE.OP_UNSUPPORTED,
+                 makeMsg(what, 'Expected OP_UNSUPPORTED, got: ' + err));
+
+          var pathTwo_ = '/baz/foo';
+          client.ext_openssh_statvfs(pathTwo_, function(err, fsInfo) {
+            assert(++self.state.responses === 2,
+                   makeMsg(what, 'Saw too many responses'));
+            assert(err && err.code === STATUS_CODE.OP_UNSUPPORTED,
+                   makeMsg(what, 'Expected OP_UNSUPPORTED, got: ' + err));
+            next();
+          });
+        });
+      };
+    },
+    what: 'Multiple extended operations in sequence fail as expected'
+  },
 ];
 
 function setup(self) {
