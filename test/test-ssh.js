@@ -6,6 +6,7 @@ var genPubKey = utils.genPublicKey;
 var basename = require('path').basename;
 var assert_ = require('assert');
 var inherits = require('util').inherits;
+var inspect = require('util').inspect;
 var TransformStream = require('stream').Transform;
 var fs = require('fs');
 
@@ -76,6 +77,28 @@ var tests = [
     },
     what: 'Custom algorithms'
   },
+  { run: function() {
+      var serverIdent = 'testing  \t';
+      var expectedFullIdent = 'SSH-2.0-' + serverIdent;
+
+      var client = new SSH2Stream({});
+      client.on('header', function(header) {
+        assert(header.identRaw === expectedFullIdent,
+               '\nSaw: ' + inspect(header.identRaw) + '\n'
+                 + 'Expected: ' + inspect(expectedFullIdent));
+        next();
+      });
+
+      var server = new SSH2Stream({
+        server: true,
+        hostKeys: HOST_KEYS,
+        ident: serverIdent
+      });
+
+      client.pipe(server).pipe(client);
+    },
+    what: 'Remote ident is not trimmed'
+  }
 ];
 
 function makeServerKey(raw) {
