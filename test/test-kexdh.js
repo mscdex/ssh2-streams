@@ -42,7 +42,7 @@ client.removeAllListeners('NEWKEYS');
 client.on('KEXDH_REPLY', function(info) {
   var state = client._state;
   var outstate = state.outgoing;
-  var buf = new Buffer(1 + 4 + outstate.pubkey.length);
+  var buf = Buffer.allocUnsafe(1 + 4 + outstate.pubkey.length);
   buf[0] = MESSAGE.KEXDH_INIT;
   buf.writeUInt32BE(outstate.pubkey.length, 1, true);
   outstate.pubkey.copy(buf, 5);
@@ -62,5 +62,4 @@ client.pipe(server).pipe(client);
 
 process.on('exit', function() {
   assert(cliError, 'Expected client error');
-  //assert(srvError, 'Expected server error');
 });

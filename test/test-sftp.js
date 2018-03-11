@@ -22,13 +22,15 @@ var tests = [
 
       this.onReady = function() {
         var path_ = '/tmp/foo.txt';
-        var handle_ = new Buffer('node.js');
+        var handle_ = Buffer.from('node.js');
         server.on('OPEN', function(id, path, pflags, attrs) {
           assert(++self.state.requests === 1,
                  makeMsg(what, 'Saw too many requests'));
           assert(id === 0, makeMsg(what, 'Wrong request id: ' + id));
           assert(path === path_, makeMsg(what, 'Wrong path: ' + path));
-          assert(pflags === (OPEN_MODE.TRUNC | OPEN_MODE.CREAT | OPEN_MODE.WRITE),
+          assert(pflags === (OPEN_MODE.TRUNC
+                             | OPEN_MODE.CREAT
+                             | OPEN_MODE.WRITE),
                  makeMsg(what, 'Wrong flags: ' + flagsToHuman(pflags)));
           server.handle(id, handle_);
           server.end();
@@ -52,7 +54,7 @@ var tests = [
       var server = this.server;
 
       this.onReady = function() {
-        var handle_ = new Buffer('node.js');
+        var handle_ = Buffer.from('node.js');
         server.on('CLOSE', function(id, handle) {
           assert(++self.state.requests === 1,
                  makeMsg(what, 'Saw too many requests'));
@@ -79,17 +81,18 @@ var tests = [
       var server = this.server;
 
       this.onReady = function() {
-        var handle_ = new Buffer('node.js');
-        var expected = new Buffer('node.jsnode.jsnode.jsnode.jsnode.jsnode.js');
-        var buffer = new Buffer(expected.length);
-        buffer.fill(0);
+        var handle_ = Buffer.from('node.js');
+        var expected =
+          Buffer.from('node.jsnode.jsnode.jsnode.jsnode.jsnode.js');
+        var buffer = Buffer.alloc(expected.length);
         server.on('READ', function(id, handle, offset, len) {
           assert(++self.state.requests <= 2,
                  makeMsg(what, 'Saw too many requests'));
           assert(id === 0, makeMsg(what, 'Wrong request id: ' + id));
           assert.deepEqual(handle, handle_, makeMsg(what, 'handle mismatch'));
           assert(offset === 5, makeMsg(what, 'Wrong read offset: ' + offset));
-          assert(len === buffer.length, makeMsg(what, 'Wrong read len: ' + len));
+          assert(len === buffer.length,
+                 makeMsg(what, 'Wrong read len: ' + len));
           server.data(id, expected);
           server.end();
         });
@@ -115,8 +118,8 @@ var tests = [
       var server = this.server;
 
       this.onReady = function() {
-        var handle_ = new Buffer('node.js');
-        var buf = new Buffer('node.jsnode.jsnode.jsnode.jsnode.jsnode.js');
+        var handle_ = Buffer.from('node.js');
+        var buf = Buffer.from('node.jsnode.jsnode.jsnode.jsnode.jsnode.js');
         server.on('WRITE', function(id, handle, offset, data) {
           assert(++self.state.requests === 1,
                  makeMsg(what, 'Saw too many requests'));
@@ -146,8 +149,8 @@ var tests = [
       var server = this.server;
 
       this.onReady = function() {
-        var handle_ = new Buffer('node.js');
-        var buf = new Buffer(3 * 32 * 1024);
+        var handle_ = Buffer.from('node.js');
+        var buf = Buffer.allocUnsafe(3 * 32 * 1024);
         server.on('WRITE', function(id, handle, offset, data) {
           ++self.state.requests;
           assert.equal(id,
@@ -222,7 +225,7 @@ var tests = [
       var server = this.server;
 
       this.onReady = function() {
-        var handle_ = new Buffer('node.js');
+        var handle_ = Buffer.from('node.js');
         var attrs_ = new Stats({
           size: 10 * 1024,
           uid: 9001,
@@ -291,7 +294,7 @@ var tests = [
       var server = this.server;
 
       this.onReady = function() {
-        var handle_ = new Buffer('node.js');
+        var handle_ = Buffer.from('node.js');
         var attrs_ = new Stats({
           uid: 9001,
           gid: 9001,
@@ -325,7 +328,7 @@ var tests = [
       var server = this.server;
 
       this.onReady = function() {
-        var handle_ = new Buffer('node.js');
+        var handle_ = Buffer.from('node.js');
         var path_ = '/tmp';
         server.on('OPENDIR', function(id, path) {
           assert(++self.state.requests === 1,
@@ -354,7 +357,7 @@ var tests = [
       var server = this.server;
 
       this.onReady = function() {
-        var handle_ = new Buffer('node.js');
+        var handle_ = Buffer.from('node.js');
         var list_ = [
           { filename: '.',
             longname: 'drwxr-xr-x  56 nodejs   nodejs      4096 Nov 10 01:05 .',
@@ -430,7 +433,7 @@ var tests = [
       var server = this.server;
 
       this.onReady = function() {
-        var handle_ = new Buffer('node.js');
+        var handle_ = Buffer.from('node.js');
         var list_ = [
           { filename: '.',
             longname: 'drwxr-xr-x  56 nodejs   nodejs      4096 Nov 10 01:05 .',
@@ -599,7 +602,9 @@ var tests = [
           assert(++self.state.responses === 1,
                  makeMsg(what, 'Saw too many responses'));
           assert(!err, makeMsg(what, 'Unexpected realpath() error: ' + err));
-          assert.deepEqual(name, name_.filename, makeMsg(what, 'name mismatch'));
+          assert.deepEqual(name,
+                           name_.filename,
+                           makeMsg(what, 'name mismatch'));
         });
       };
     },
@@ -743,8 +748,8 @@ var tests = [
 
       this.onReady = function() {
         var path_ = '/foo/bar/baz';
-        var handle_ = new Buffer('hi mom!');
-        var data_ = new Buffer('hello world');
+        var handle_ = Buffer.from('hi mom!');
+        var data_ = Buffer.from('hello world');
         server.once('OPEN', function(id, path, pflags, attrs) {
           assert(id === 0, makeMsg(what, 'Wrong request id: ' + id));
           assert(path === path_, makeMsg(what, 'Wrong path: ' + path));
@@ -793,8 +798,8 @@ var tests = [
 
       this.onReady = function() {
         var path_ = '/foo/bar/baz';
-        var handle_ = new Buffer('hi mom!');
-        var data_ = new Buffer('hello world');
+        var handle_ = Buffer.from('hi mom!');
+        var data_ = Buffer.from('hello world');
         var reads = 0;
         server.once('OPEN', function(id, path, pflags, attrs) {
           assert(id === 0, makeMsg(what, 'Wrong request id: ' + id));
@@ -813,15 +818,20 @@ var tests = [
           server.attrs(id, attrs);
         }).on('READ', function(id, handle, offset, len) {
           assert(++reads <= 2, makeMsg(what, 'Saw too many READs'));
-          assert(id === 2 || id === 3, makeMsg(what, 'Wrong request id: ' + id));
+          assert(id === 2 || id === 3,
+                 makeMsg(what, 'Wrong request id: ' + id));
           assert.deepEqual(handle, handle_, makeMsg(what, 'handle mismatch'));
           switch(id) {
             case 2:
-              assert(offset === 0, makeMsg(what, 'Wrong read offset for first read: ' + offset));
+              assert(offset === 0,
+                     makeMsg(what,
+                             'Wrong read offset for first read: ' + offset));
               server.data(id, data_);
               break;
             case 3:
-              assert(offset === data_.length, makeMsg(what, 'Wrong read offset for second read: ' + offset));
+              assert(offset === data_.length,
+                     makeMsg(what,
+                             'Wrong read offset for second read: ' + offset));
               server.status(id, STATUS_CODE.EOF);
               break;
           }
@@ -855,8 +865,8 @@ var tests = [
         var reads = 0;
         var closes = 0;
         var path_ = '/foo/bar/baz';
-        var handle_ = new Buffer('hi mom!');
-        var data_ = new Buffer('hello world');
+        var handle_ = Buffer.from('hi mom!');
+        var data_ = Buffer.from('hello world');
         server.on('OPEN', function(id, path, pflags, attrs) {
           assert(++opens === 1, makeMsg(what, 'Saw too many OPENs'));
           assert(id === 0, makeMsg(what, 'Wrong request id: ' + id));
@@ -945,8 +955,8 @@ var tests = [
         var closes = 0;
         var fsetstat = false;
         var path_ = '/foo/bar/baz';
-        var handle_ = new Buffer('hi mom!');
-        var data_ = new Buffer('hello world');
+        var handle_ = Buffer.from('hi mom!');
+        var data_ = Buffer.from('hello world');
         var expFlags = OPEN_MODE.TRUNC | OPEN_MODE.CREAT | OPEN_MODE.WRITE;
         server.on('OPEN', function(id, path, pflags, attrs) {
           assert(++opens === 1, makeMsg(what, 'Saw too many OPENs'));
@@ -1011,7 +1021,7 @@ var tests = [
       var server = this.server;
 
       this.onReady = function() {
-        var handle_ = new Buffer('node.js');
+        var handle_ = Buffer.from('node.js');
         server.on('READDIR', function(id, handle) {
           assert(++self.state.requests === 1,
                  makeMsg(what, 'Saw too many requests'));
@@ -1084,7 +1094,7 @@ var tests = [
           assert.strictEqual(err.lang, '');
           next();
         });
-        client.write(new Buffer([
+        client.write(Buffer.from([
           0, 0, 0, 18,
           101,
           0, 0, 0, 0,
@@ -1092,7 +1102,7 @@ var tests = [
           0, 0, 0, 5,  85, 104, 32, 111, 104
         ]));
       });
-      client.write(new Buffer([
+      client.write(Buffer.from([
         0, 0, 0, 5,
         2,
         0, 0, 0, 3
@@ -1111,14 +1121,14 @@ var tests = [
           assert.strictEqual(err.lang, '');
           next();
         });
-        client.write(new Buffer([
+        client.write(Buffer.from([
           0, 0, 0, 9,
           101,
           0, 0, 0, 0,
           0, 0, 0, SFTPStream.STATUS_CODE.FAILURE
         ]));
       });
-      client.write(new Buffer([
+      client.write(Buffer.from([
         0, 0, 0, 5,
         2,
         0, 0, 0, 3
@@ -1139,7 +1149,7 @@ var tests = [
                            'Unexpected packet before version');
         next();
       });
-      client.write(new Buffer([
+      client.write(Buffer.from([
         1, 2, 3, 4,
         5,
         6, 7, 8, 9
@@ -1160,7 +1170,7 @@ var tests = [
                            'Unexpected packet before init');
         next();
       });
-      client.write(new Buffer([
+      client.write(Buffer.from([
         1, 2, 3, 4,
         5,
         6, 7, 8, 9
@@ -1246,7 +1256,7 @@ function setup(self) {
 function flagsToHuman(flags) {
   var ret = [];
 
-  for (var i = 0, keys = Object.keys(OPEN_MODE), len = keys.length; i < len; ++i)
+  for (var i = 0, keys = Object.keys(OPEN_MODE); i < keys.length; ++i)
     if (flags & OPEN_MODE[keys[i]])
       ret.push(keys[i]);
 

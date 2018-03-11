@@ -118,7 +118,7 @@ var tests = [
       });
       client.push('SSH-2.0-asdf\r\n');
       // 500,000 byte packet_length
-      client.push(new Buffer([0x00, 0x07, 0xA1, 0x20, 0x00, 0x00, 0x00, 0x00]));
+      client.push(Buffer.from([0x00, 0x07, 0xA1, 0x20, 0x00, 0x00, 0x00, 0x00]));
     },
     what: 'Bad packet length (max)'
   },
@@ -140,7 +140,7 @@ var tests = [
         next();
       });
       client.push('SSH-2.0-asdf\r\n');
-      client.push(new Buffer([0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00]));
+      client.push(Buffer.from([0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00]));
     },
     what: 'Bad packet length (min)'
   },

@@ -3,7 +3,7 @@
   "author": "Brian White <mscdex@mscdex.net>",
   "description": "SSH2 and SFTP(v3) client/server protocol streams for node.js",
   "main": "./index",
-  "engines": { "node": ">=0.10.0" },
+  "engines": { "node": ">=4.5.0" },
   "dependencies": {
     "streamsearch": "~0.1.2",
     "asn1": "~0.2.0",
