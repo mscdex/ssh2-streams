@@ -40,7 +40,7 @@ function makePair(cb) {
 }
 
 function signWithClientKey(blob, syncCb) {
-  var signType = (PARSED_CLIENT_PRV_KEY.type === 'rsa' ? 'R' : 'D') + 'SA-SHA1';
+  var signType = 'sha1';
   var signature = crypto.createSign(signType);
   signature.update(blob);
   signature = signature.sign(PARSED_CLIENT_PRV_KEY.privateOrig);
