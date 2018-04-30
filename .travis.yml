@@ -2,14 +2,14 @@ sudo: false
 language: node_js
 notifications:
   email: false
-env:
-  matrix:
-  - TRAVIS_NODE_VERSION="6"
-  - TRAVIS_NODE_VERSION="8"
-  - TRAVIS_NODE_VERSION="10"
-install:
-  - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
+matrix:
+  include:
+  - node_js: "6"
+  - node_js: "8"
+  - node_js: "10"
+before_install:
   - npm i -g npm@latest
+install:
   - node --version
   - npm --version
   - npm ci
