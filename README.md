@@ -9,7 +9,7 @@ SSH2 and SFTP(v3) client/server protocol streams for [node.js](http://nodejs.org
 Requirements
 ============
 
-* [node.js](http://nodejs.org/) -- v4.5.0 or newer
+* [node.js](http://nodejs.org/) -- v5.2.0 or newer
 
 
 Install
@@ -562,8 +562,16 @@ SSH2Stream methods
 Utility methods
 ---------------
 
-* **parseKey**(< _mixed_ >keyData) - _object_ - Parses a private/public key in OpenSSH and RFC4716 formats.
+* **parseKey**(< _mixed_ >keyData[, < _string_ >passphrase]) - _object_ - Parses a private/public key in OpenSSH, RFC4716, or PPK format. For encrypted private keys, the key will be decrypted with the given `passphrase`. The returned object has these properties and methods:
 
-* **decryptKey**(< _object_ >privKeyInfo, < _string_ >passphrase) - _(void)_ - Takes a private key parsed with `parseKey()` and decrypts it with `passphrase`. The decrypted key data overwrites the original encrypted copy.
+    * **type** - _string_ - The full key type (e.g. `'ssh-rsa'`)
 
-* **genPublicKey**(< _object_ >privKeyInfo) - _object_ - Takes a private key parsed with `parseKey()` and generates the associated public key and returns the public key information in the same format as `parseKey()`.
+    * **comment** - _string_ - The comment for the key
+
+    * **getPrivatePEM**() - _string_ - This returns the PEM version of a private key
+
+    * **getPublicSSH**() - _string_ - This returns the SSH version of a public key (for either public key or derived from a private key)
+
+    * **sign**(< _mixed_ >data) - _mixed_ - This signs the given `data` using this key and returns a _Buffer_ containing the signature on success. On failure, an _Error_ will be returned. `data` can be anything accepted by node's [`sign.update()`](https://nodejs.org/docs/latest/api/crypto.html#crypto_sign_update_data_inputencoding).
+
+    * **verify**(< _mixed_ >data, < _Buffer_ >signature) - _mixed_ - This verifies a `signature` of the given `data` using this key and returns `true` if the signature could be verified. On failure, either `false` will be returned or an _Error_ will be returned upon a more critical failure. `data` can be anything accepted by node's [`verify.update()`](https://nodejs.org/docs/latest/api/crypto.html#crypto_verify_update_data_inputencoding).
