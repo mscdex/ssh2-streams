@@ -1,0 +1,6 @@
+{
+  "type": "ecdsa-sha2-nistp256",
+  "comment": "new openssh format",
+  "public": "-----BEGIN PUBLIC KEY-----\nAAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOMhvQ6f8DNg\nMsVGL6Dd8Z0AgXvYoUaJkGk/ygpnxuydwf1Qu1VX3nXtw1xE24MRNC28uqgJ0ift\nOKlijwm/+Uo=\n-----END PUBLIC KEY-----",
+  "private": null
+}

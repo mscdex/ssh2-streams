@@ -1,0 +1,6 @@
+{
+  "type": "ssh-rsa",
+  "comment": "Foo bar baz",
+  "public": "-----BEGIN PUBLIC KEY-----\nAAAAAwEAAQAAAQEA4q6eZdx7LYh46PcZNcS3CnO7GuYsEJZeTj5LQSgp21IyTela\nBPprijnMwKa+pLQt5TEobpKFFNecPdT6oPoOKKMe6oH/pX0BNyAEB9KFZfZgh0v4\nJ4IOiO0KHMBNkoTFeGrursPkqYRJ0HL4CqYqRdINy1sgDU6jUIOuDD5XZzlpDXb1\nftZoCei9OHSWrMKbzibJc64JFM7tUoK6Vl64YiPgxsNXOJYMTrelVJYebtsNrJFm\nh3XXQABDVutWMYb8I6IrNs8zjxsf6c6N2tKXkk9G4EDKKip4g0bzDmD/fREPQ9vL\ni59N+ZsyjWCKKE3PZSvwtoyLQN38KvTx3wjNQw==\n-----END PUBLIC KEY-----",
+  "private": null
+}

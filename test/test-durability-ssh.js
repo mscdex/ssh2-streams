@@ -11,7 +11,7 @@ var t = -1;
 var group = path.basename(__filename, '.js') + '/';
 var fixturesdir = path.join(__dirname, 'fixtures');
 
-var HOST_KEY_RSA = fs.readFileSync(path.join(fixturesdir, 'ssh_host_rsa_key'));
+var HOST_KEY_RSA = fs.readFileSync(path.join(fixturesdir, 'openssh_new_rsa'));
 var SERVER_CONFIG = {
   server: true,
   hostKeys: { 'ssh-rsa': HOST_KEY_RSA }

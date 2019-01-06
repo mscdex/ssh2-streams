@@ -1,22 +1,17 @@
 var SSH2Stream = require('../lib/ssh');
 var parseKey = require('../lib/utils').parseKey;
-var genPubKey = require('../lib/utils').genPublicKey;
 var MESSAGE = require('../lib/constants').MESSAGE;
 
 var assert = require('assert');
 var fs = require('fs');
 
-var SERVER_KEY = fs.readFileSync(__dirname + '/fixtures/ssh_host_rsa_key');
+var SERVER_KEY = fs.readFileSync(__dirname + '/fixtures/openssh_new_rsa');
 var SERVER_KEY_PRV = parseKey(SERVER_KEY);
-var SERVER_KEY_PUB = genPubKey(SERVER_KEY_PRV);
 
 var server = new SSH2Stream({
   server: true,
   hostKeys: {
-    'ssh-rsa': {
-      privateKey: SERVER_KEY_PRV,
-      publicKey: SERVER_KEY_PUB,
-    }
+    'ssh-rsa': SERVER_KEY_PRV
   }
 });
 var client = new SSH2Stream();

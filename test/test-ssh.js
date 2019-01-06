@@ -1,7 +1,6 @@
 var SSH2Stream = require('../lib/ssh');
 var utils = require('../lib/utils');
 var parseKey = utils.parseKey;
-var genPubKey = utils.genPublicKey;
 
 var basename = require('path').basename;
 var assert_ = require('assert');
@@ -12,8 +11,8 @@ var fs = require('fs');
 
 var group = basename(__filename, '.js') + '/';
 var t = -1;
-var SERVER_KEY = fs.readFileSync(__dirname + '/fixtures/ssh_host_rsa_key');
-var HOST_KEYS = { 'ssh-rsa': makeServerKey(SERVER_KEY) };
+var SERVER_KEY = fs.readFileSync(__dirname + '/fixtures/openssh_new_rsa');
+var HOST_KEYS = { 'ssh-rsa': parseKey(SERVER_KEY) };
 
 function SimpleStream() {
   TransformStream.call(this);
@@ -101,13 +100,6 @@ var tests = [
   }
 ];
 
-function makeServerKey(raw) {
-  var privateKey = parseKey(raw);
-  return {
-    privateKey: privateKey,
-    publicKey: genPubKey(privateKey)
-  };
-}
 
 function hexByte(n) {
   return String.fromCharCode(n);

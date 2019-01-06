@@ -1,27 +1,20 @@
 var SSH2Stream = require('../lib/ssh');
 var parseKey = require('../lib/utils').parseKey;
-var genPubKey = require('../lib/utils').genPublicKey;
 
 var assert = require('assert');
-var crypto = require('crypto');
 var fs = require('fs');
 
 var t = -1;
-var SERVER_PRV_KEY = fs.readFileSync(__dirname + '/fixtures/ssh_host_rsa_key');
-var PARSED_SERVER_PRV_KEY = parseKey(SERVER_PRV_KEY);
-var PARSED_SERVER_PUB_KEY = genPubKey(PARSED_SERVER_PRV_KEY);
-var CLIENT_PRV_KEY = fs.readFileSync(__dirname + '/fixtures/id_rsa');
-var PARSED_CLIENT_PRV_KEY = parseKey(CLIENT_PRV_KEY);
-var PARSED_CLIENT_PUB_KEY = genPubKey(PARSED_CLIENT_PRV_KEY);
+var SERVER_PRV_KEY = fs.readFileSync(__dirname + '/fixtures/openssh_new_rsa');
+var PARSED_SERVER_KEY = parseKey(SERVER_PRV_KEY);
+var CLIENT_PRV_KEY = fs.readFileSync(__dirname + '/fixtures/openssh_old_rsa');
+var PARSED_CLIENT_KEY = parseKey(CLIENT_PRV_KEY);
 
 function makePair(cb) {
   var server = new SSH2Stream({
     server: true,
     hostKeys: {
-      'ssh-rsa': {
-        privateKey: PARSED_SERVER_PRV_KEY,
-        publicKey: PARSED_SERVER_PUB_KEY
-      }
+      'ssh-rsa': PARSED_SERVER_KEY
     }
   });
   var client = new SSH2Stream();
@@ -40,11 +33,7 @@ function makePair(cb) {
 }
 
 function signWithClientKey(blob, syncCb) {
-  var signType = 'sha1';
-  var signature = crypto.createSign(signType);
-  signature.update(blob);
-  signature = signature.sign(PARSED_CLIENT_PRV_KEY.privateOrig);
-  syncCb(signature);
+  syncCb(PARSED_CLIENT_KEY.sign(blob));
 }
 
 function bufferEqual(a, b) {
@@ -62,15 +51,15 @@ function publickey(server, client) {
     assert.equal(user, 'bob');
     assert.equal(service, 'ssh-connection');
     assert.equal(method, 'publickey');
-    assert.equal(data.keyAlgo, PARSED_CLIENT_PUB_KEY.fulltype);
-    assert.equal(true, bufferEqual(data.key, PARSED_CLIENT_PUB_KEY.public));
+    assert.equal(data.keyAlgo, PARSED_CLIENT_KEY.type);
+    assert.equal(true, bufferEqual(data.key, PARSED_CLIENT_KEY.getPublicSSH()));
     assert.equal(data.signature, undefined);
     assert.equal(data.blob, undefined);
     return server.authPKOK(data.keyAlgo, data.key);
   });
   client.on('USERAUTH_PK_OK', function() {
     next();
-  }).authPK('bob', PARSED_CLIENT_PUB_KEY);
+  }).authPK('bob', PARSED_CLIENT_KEY);
 }
 
 function keyboardInteractive(server, client) {
@@ -224,8 +213,8 @@ function mixedMethods(server, client) {
   });
 
   // Silly to submit all these auths at once, but allowed by RFC4252
-  client.authPK('bob', PARSED_CLIENT_PUB_KEY);
-  client.authPK('bob', PARSED_CLIENT_PUB_KEY, signWithClientKey);
+  client.authPK('bob', PARSED_CLIENT_KEY);
+  client.authPK('bob', PARSED_CLIENT_KEY, signWithClientKey);
   client.authPassword('bob', 'seekrit');
   client.authKeyboard('bob');
 }
