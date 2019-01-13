@@ -60,6 +60,8 @@ fs.readdirSync(__dirname + '/fixtures').forEach(function(name) {
         type: curKey.type,
         comment: curKey.comment,
         public: curKey.getPublicPEM(),
+        publicSSH: curKey.getPublicSSH()
+                   && curKey.getPublicSSH().toString('base64'),
         private: curKey.getPrivatePEM()
       };
       assert.deepEqual(details,
@@ -71,7 +73,7 @@ fs.readdirSync(__dirname + '/fixtures').forEach(function(name) {
     });
   }
 
-  if (isEncrypted) {
+  if (isEncrypted && !isPublic) {
     // Make sure parsing encrypted keys without a passhprase or incorrect
     // passphrase results in an appropriate error
     var err = parseKey(key);
@@ -106,5 +108,29 @@ fs.readdirSync(__dirname + '/fixtures').forEach(function(name) {
       if (!verified)
         failMsg(name, 'Failed to verify signed data with key', true);
     });
+    if (res.length === 1 && !isPPK) {
+      var pubFile = fs.readFileSync(__dirname + '/fixtures/' + name + '.pub');
+      var pubParsed = parseKey(pubFile);
+      if (!(pubParsed instanceof Error)) {
+        var sig = res[0].sign(data);
+        if (sig instanceof Error) {
+          failMsg(name,
+                  'Error while signing data with key: ' + sig.message,
+                  true);
+        }
+        var verified = pubParsed.verify(data, sig);
+        if (verified instanceof Error) {
+          failMsg(name,
+                  'Error while verifying signed data with separate public key: '
+                    + verified.message,
+                  true);
+        }
+        if (!verified) {
+          failMsg(name,
+                  'Failed to verify signed data with separate public key',
+                  true);
+        }
+      }
+    }
   }
 });
