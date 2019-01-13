@@ -562,13 +562,15 @@ SSH2Stream methods
 Utility methods
 ---------------
 
-* **parseKey**(< _mixed_ >keyData[, < _string_ >passphrase]) - _object_ - Parses a private/public key in OpenSSH, RFC4716, or PPK format. For encrypted private keys, the key will be decrypted with the given `passphrase`. The returned object has these properties and methods:
+* **parseKey**(< _mixed_ >keyData[, < _string_ >passphrase]) - _mixed_ - Parses a private/public key in OpenSSH, RFC4716, or PPK format. For encrypted private keys, the key will be decrypted with the given `passphrase`. The returned value will be an array of objects (currently in the case of modern OpenSSH keys) or an object with these properties and methods:
 
     * **type** - _string_ - The full key type (e.g. `'ssh-rsa'`)
 
     * **comment** - _string_ - The comment for the key
 
     * **getPrivatePEM**() - _string_ - This returns the PEM version of a private key
+
+    * **getPublicPEM**() - _string_ - This returns the PEM version of a public key (for either public key or derived from a private key)
 
     * **getPublicSSH**() - _string_ - This returns the SSH version of a public key (for either public key or derived from a private key)
 
