@@ -552,7 +552,7 @@ SSH2Stream methods
 
 * **x11**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _object_ >info) - _boolean_ - Writes an X11 channel open packet. `info` must contain `originAddr` and `originPort`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
-* **authAgent**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket) - _boolean_ - Writes an auth-agent@openssh.com channel open packet. Returns `false` if you should wait for the `continue` event before sending any more traffic.
+* **openssh_authAgent**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket) - _boolean_ - Writes an auth-agent@openssh.com channel open packet. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
 * **openssh_forwardedStreamLocal**(< _integer_ >channel, < _integer_ >initWindow, < _integer_ >maxPacket, < _object_ >info) - _boolean_ - Writes an forwarded-streamlocal@openssh.com channel open packet. `info` must contain `socketPath`. Returns `false` if you should wait for the `continue` event before sending any more traffic.
 
