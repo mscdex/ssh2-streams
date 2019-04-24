@@ -1176,6 +1176,37 @@ var tests = [
     },
     what: 'End SFTP stream on bad handshake (server)'
   },
+  { run: function() {
+      setup(this);
+
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
+
+      this.onReady = function() {
+        var handle_ = Buffer.from([0,0,0,1]);
+        var buffer = Buffer.allocUnsafe(4);
+        server.once('READ', function(id, handle, offset, len) {
+          ++self.state.requests;
+          assert(id === 0, makeMsg(what, 'Wrong request id: ' + id));
+          assert.deepEqual(handle, handle_, makeMsg(what, 'handle mismatch'));
+          assert(offset === 0, makeMsg(what, 'Wrong read offset: ' + offset));
+          assert(len === buffer.length,
+                 makeMsg(what, 'Wrong read length: ' + len));
+          server.data(id, Buffer.alloc(len + 1));
+        });
+        client.readData(handle_, buffer, 0, buffer.length, 0, clientReadCb);
+        function clientReadCb(err, buf) {
+          ++self.state.responses;
+          assert(err && err.message.indexOf('more data than requested') !== -1,
+                 makeMsg(what, 'Expected error'));
+          server.end();
+        }
+      };
+    },
+    what: 'Abort on data chunk larger than requested'
+  },
 ];
 
 function setup(self) {
