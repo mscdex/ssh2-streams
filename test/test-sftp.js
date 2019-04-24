@@ -97,7 +97,7 @@ var tests = [
           server.end();
         });
         client.readData(handle_, buffer, 0, buffer.length, 5, clientReadCb);
-        function clientReadCb(err, code) {
+        function clientReadCb(err, nb) {
           assert(++self.state.responses <= 2,
                  makeMsg(what, 'Saw too many responses'));
           assert(!err, makeMsg(what, 'Unexpected readData() error: ' + err));
@@ -778,7 +778,6 @@ var tests = [
           server.status(id, STATUS_CODE.OK);
           server.end();
         });
-        var buf = [];
         client.readFile(path_, function(err, buf) {
           ++self.state.responses;
           assert(!err, makeMsg(what, 'Unexpected error: ' + err));
@@ -842,7 +841,6 @@ var tests = [
           server.status(id, STATUS_CODE.OK);
           server.end();
         });
-        var buf = [];
         client.readFile(path_, function(err, buf) {
           ++self.state.responses;
           assert(!err, makeMsg(what, 'Unexpected error: ' + err));
