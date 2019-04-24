@@ -12,6 +12,9 @@ var server = new SSH2Stream({
   server: true,
   hostKeys: {
     'ssh-rsa': SERVER_KEY_PRV
+  },
+  algorithms: {
+    serverHostKey: ['ssh-rsa']
   }
 });
 var client = new SSH2Stream();

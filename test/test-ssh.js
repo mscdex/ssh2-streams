@@ -13,6 +13,7 @@ var group = basename(__filename, '.js') + '/';
 var t = -1;
 var SERVER_KEY = fs.readFileSync(__dirname + '/fixtures/openssh_new_rsa');
 var HOST_KEYS = { 'ssh-rsa': parseKey(SERVER_KEY) };
+var HOST_ALGORITHMS = { serverHostKey: ['ssh-rsa'] };
 
 function SimpleStream() {
   TransformStream.call(this);
@@ -37,7 +38,8 @@ var tests = [
       var clientReady = false;
       var server = new SSH2Stream({
         server: true,
-        hostKeys: HOST_KEYS
+        hostKeys: HOST_KEYS,
+        algorithms: HOST_ALGORITHMS
       });
       var serverBufStream = new SimpleStream();
       var serverReady = false;
@@ -91,6 +93,7 @@ var tests = [
       var server = new SSH2Stream({
         server: true,
         hostKeys: HOST_KEYS,
+        algorithms: HOST_ALGORITHMS,
         ident: serverIdent
       });
 

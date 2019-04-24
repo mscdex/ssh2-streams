@@ -15,6 +15,9 @@ function makePair(cb) {
     server: true,
     hostKeys: {
       'ssh-rsa': PARSED_SERVER_KEY
+    },
+    algorithms: {
+      serverHostKey: ['ssh-rsa']
     }
   });
   var client = new SSH2Stream();
