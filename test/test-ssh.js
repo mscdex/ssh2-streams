@@ -100,7 +100,46 @@ var tests = [
       client.pipe(server).pipe(client);
     },
     what: 'Remote ident is not trimmed'
-  }
+  },
+  { run: function() {
+      var algos = { compress: ['zlib@openssh.com'] };
+      var client = new SSH2Stream({
+        algorithms: algos
+      });
+      var clientReady = false;
+      var server = new SSH2Stream({
+        server: true,
+        hostKeys: HOST_KEYS,
+        algorithms: algos
+      });
+      var serverReady = false;
+
+      function onNEWKEYS() {
+        if (this === client) {
+          assert(!clientReady, 'Already received client NEWKEYS event');
+          clientReady = true;
+        } else {
+          assert(!serverReady, 'Already received server NEWKEYS event');
+          serverReady = true;
+        }
+        if (clientReady && serverReady)
+          client.authNone('asdf');
+      }
+
+      client.on('NEWKEYS', onNEWKEYS).once('USERAUTH_SUCCESS', function() {
+        client.ping();
+      });
+      server.on('NEWKEYS', onNEWKEYS).once('USERAUTH_REQUEST', function() {
+        server.authSuccess();
+      }).once('GLOBAL_REQUEST', function(reqName) {
+        assert_.strictEqual(reqName, 'keepalive@openssh.com');
+        next();
+      });
+
+      client.pipe(server).pipe(client);
+    },
+    what: 'Ensure post-user auth compression starts correctly on server'
+  },
 ];
 
 
