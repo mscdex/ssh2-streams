@@ -102,15 +102,19 @@ var tests = [
     what: 'Remote ident is not trimmed'
   },
   { run: function() {
-      var algos = { compress: ['zlib@openssh.com'] };
       var client = new SSH2Stream({
-        algorithms: algos
+        algorithms: {
+          compress: ['zlib@openssh.com']
+        }
       });
       var clientReady = false;
       var server = new SSH2Stream({
         server: true,
         hostKeys: HOST_KEYS,
-        algorithms: algos
+        algorithms: {
+          serverHostKey: ['ssh-rsa'],
+          compress: ['zlib@openssh.com']
+        }
       });
       var serverReady = false;
 
