@@ -914,6 +914,47 @@ var tests = [
       var server = this.server;
 
       this.onReady = function() {
+        var path_ = '/foo/bar/baz';
+        var handle_ = Buffer.from('hi mom!');
+        var data_ = Buffer.from('hello world');
+        server.on('OPEN', function(id, path, pflags, attrs) {
+          server.handle(id, handle_);
+        }).on('READ', function(id, handle, offset, len) {
+          if (offset > data_.length) {
+            server.status(id, STATUS_CODE.EOF);
+          } else {
+            // Only read 4 bytes at a time
+            server.data(id, data_.slice(offset, offset + 4));
+          }
+        }).on('CLOSE', function(id, handle) {
+          ++self.state.requests;
+          server.status(id, STATUS_CODE.OK);
+          server.end();
+        });
+        var buf = [];
+        client.createReadStream(path_).on('readable', function() {
+          var chunk;
+          while ((chunk = this.read()) !== null) {
+            buf.push(chunk);
+          }
+        }).on('end', function() {
+          self.state.responses += 1;
+          buf = Buffer.concat(buf);
+          assert.deepEqual(buf, data_, makeMsg(what, 'data mismatch'));
+        });
+      };
+    },
+    what: 'ReadStream (fewer bytes than requested)'
+  },
+  { run: function() {
+      setup(this);
+
+      var self = this;
+      var what = this.what;
+      var client = this.client;
+      var server = this.server;
+
+      this.onReady = function() {
         var opens = 0;
         var path_ = '/foo/bar/baz';
         var error;
