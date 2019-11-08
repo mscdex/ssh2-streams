@@ -5,6 +5,8 @@ var assert = require('assert');
 var inspect = require('util').inspect;
 var fs = require('fs');
 
+var EDDSA_SUPPORTED = require('../lib/constants.js').EDDSA_SUPPORTED;
+
 function failMsg(name, message, exit) {
   var msg = '[' + name + '] ' + message;
   if (!exit)
@@ -16,6 +18,9 @@ function failMsg(name, message, exit) {
 fs.readdirSync(__dirname + '/fixtures').forEach(function(name) {
   if (/\.result$/i.test(name))
     return;
+  if (/ed25519/i.test(name) && !EDDSA_SUPPORTED)
+    return;
+
   var isPublic = /\.pub$/i.test(name);
   var isEncrypted = /_enc/i.test(name);
   var isPPK = /^ppk_/i.test(name);
