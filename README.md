@@ -9,7 +9,7 @@ SSH2 and SFTP(v3) client/server protocol streams for [node.js](http://nodejs.org
 Requirements
 ============
 
-* [node.js](http://nodejs.org/) -- v5.2.0 or newer
+* [node.js](http://nodejs.org/) -- v5.10.0 or newer
 
 
 Install
