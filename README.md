@@ -393,13 +393,15 @@ SSH2Stream methods
 
             * Default values:
 
-                1. ssh-rsa
+                1. ssh-ed25519 **(node v12.0.0 or newer)**
                 2. ecdsa-sha2-nistp256 **(node v5.2.0 or newer)**
                 3. ecdsa-sha2-nistp384 **(node v5.2.0 or newer)**
                 4. ecdsa-sha2-nistp521 **(node v5.2.0 or newer)**
+                5. ssh-rsa
 
             * Supported values:
 
+                * ssh-ed25519 **(node v12.0.0 or newer)**
                 * ssh-rsa
                 * ecdsa-sha2-nistp256 **(node v5.2.0 or newer)**
                 * ecdsa-sha2-nistp384 **(node v5.2.0 or newer)**
