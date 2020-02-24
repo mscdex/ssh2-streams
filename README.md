@@ -342,21 +342,31 @@ SSH2Stream methods
 
             * Default values:
 
-                1. ecdh-sha2-nistp256 **(node v0.11.14 or newer)**
-                2. ecdh-sha2-nistp384 **(node v0.11.14 or newer)**
-                3. ecdh-sha2-nistp521 **(node v0.11.14 or newer)**
-                4. diffie-hellman-group-exchange-sha256 **(node v0.11.12 or newer)**
-                5. diffie-hellman-group14-sha1
+                1. curve25519-sha256 **(node v13.9.0 or newer)**
+                2. curve25519-sha256@libssh.org **(node v13.9.0 or newer)**
+                3. ecdh-sha2-nistp256 **(node v0.11.14 or newer)**
+                4. ecdh-sha2-nistp384 **(node v0.11.14 or newer)**
+                5. ecdh-sha2-nistp521 **(node v0.11.14 or newer)**
+                6. diffie-hellman-group-exchange-sha256 **(node v0.11.12 or newer)**
+                7. diffie-hellman-group14-sha256
+                8. diffie-hellman-group16-sha512
+                9. diffie-hellman-group18-sha512
+                10. diffie-hellman-group14-sha1
 
             * Supported values:
 
+                * curve25519-sha256 **(node v13.9.0 or newer)**
+                * curve25519-sha256@libssh.org **(node v13.9.0 or newer)**
                 * ecdh-sha2-nistp256 **(node v0.11.14 or newer)**
                 * ecdh-sha2-nistp384 **(node v0.11.14 or newer)**
                 * ecdh-sha2-nistp521 **(node v0.11.14 or newer)**
-                * diffie-hellman-group-exchange-sha256 **(node v0.11.12 or newer)**
-                * diffie-hellman-group14-sha1
                 * diffie-hellman-group-exchange-sha1 **(node v0.11.12 or newer)**
+                * diffie-hellman-group-exchange-sha256 **(node v0.11.12 or newer)**
                 * diffie-hellman-group1-sha1
+                * diffie-hellman-group14-sha1
+                * diffie-hellman-group14-sha256
+                * diffie-hellman-group16-sha512
+                * diffie-hellman-group18-sha512
 
         * **cipher** - _array_ - Ciphers.
 
