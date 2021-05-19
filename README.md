@@ -3,7 +3,7 @@ Description
 
 SSH2 and SFTP(v3) client/server protocol streams for [node.js](http://nodejs.org/).
 
-[![Build Status](https://travis-ci.org/Natizyskunk/ssh2-streams.svg?branch=master)](https://travis-ci.org/mscdex/ssh2-streams)
+[![Build Status](https://travis-ci.org/mscdex/ssh2-streams.svg?branch=master)](https://travis-ci.org/mscdex/ssh2-streams)
 
 
 Requirements
@@ -15,7 +15,7 @@ Requirements
 Install
 =======
 
-    npm install https://github.com/Natizyskunk/ssh2-streams.git
+    npm install https://github.com/mscdex/ssh2-streams.git
 
 
 API

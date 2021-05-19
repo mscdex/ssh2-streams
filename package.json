@@ -2,7 +2,6 @@
   "name": "ssh2-streams",
   "version": "0.4.11",
   "author": "Brian White <mscdex@mscdex.net>",
-  "modder": "Natizyskunk <gitlab@Natizyskunk>",
   "description": "SSH2 and SFTP(v3) client/server protocol streams for node.js",
   "main": "./index",
   "engines": {
@@ -29,11 +28,11 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "http://github.com/Natizyskunk/ssh2-streams/raw/master/LICENSE"
+      "url": "http://github.com/mscdex/ssh2-streams/raw/master/LICENSE"
     }
   ],
   "repository": {
     "type": "git",
-    "url": "http://github.com/Natizyskunk/ssh2-streams.git"
+    "url": "http://github.com/mscdex/ssh2-streams.git"
   }
 }
