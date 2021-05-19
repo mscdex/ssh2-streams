@@ -15,7 +15,7 @@ Requirements
 Install
 =======
 
-    npm install https://github.com/mscdex/ssh2-streams.git
+    npm install ssh2-streams
 
 
 API
