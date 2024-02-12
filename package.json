@@ -1,6 +1,6 @@
 {
   "name": "@olzie-12/ssh2-streams",
-  "version": "0.4.14",
+  "version": "0.4.15",
   "author": "Brian White <mscdex@mscdex.net>",
   "description": "SSH2 and SFTP(v3) client/server protocol streams for node.js",
   "main": "./index",
@@ -11,9 +11,6 @@
     "asn1": "~0.2.0",
     "bcrypt-pbkdf": "^1.0.2",
     "streamsearch": "~0.1.2",
-    "@types/node": "^18.11.18"
-  },
-  "devDependencies": {
     "@types/node": "^18.11.18"
   },
   "scripts": {
