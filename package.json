@@ -10,7 +10,11 @@
   "dependencies": {
     "asn1": "~0.2.0",
     "bcrypt-pbkdf": "^1.0.2",
-    "streamsearch": "~0.1.2"
+    "streamsearch": "~0.1.2",
+    "@types/node": "^18.11.18"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18"
   },
   "scripts": {
     "test": "node test/test.js"
